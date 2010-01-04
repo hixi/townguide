@@ -1,0 +1,52 @@
+TOWNGUIDE TODO LIST
+===================
+
+1.  Extend output options to include postscript so it produces
+    nice printable options.  This is likely to require designing a
+    plugin system so it is easy to provide different output options.
+
+2.  Done
+
+3.  Done
+
+4.  Maybe provide a graphical interface to produce the configuration file.
+
+5.  Set up a service to allow people to request PDF versions of a guide
+    for a specified region, so they do not have to install postgresql etc.
+
+6.  Done
+
+7.  Tidy up PDF output to make it presentable (LaTeX currently messes about
+    and groups the tables at the end of the document).
+
+8.  Add support for large scale maps of each grid square with map features
+    identified on the map (probably 1 page of output per grid square with
+    a map followed by a numbered list of features, with corresponding numbers
+    on the map).
+
+9.  Add selectable output options to configuration file (e.g. whether to 
+    include street index or large scale maps).
+
+
+
+DONE LIST
+=========
+2.  Extend output options to produce PDF (this is harder than postscript
+    because I have used postscript before).
+    	    Done in SVN Version 49 - uses pdfLaTeX to produce the PDF output.
+
+3.  Improve the features description in the configuration file.
+    At the moment you must specify several key:value pairs for different
+    tagging possibilities, and each one appears as a separate section of the
+    Fetures page.  It would nice to be able to say 
+    	    "Shopping:shop=mall|supermarket|convenience"
+    and have the program produce a feature group labelled "Shopping" that
+    corresponds to nodes/ways where shop=mall or shop=supermarket 
+    or shop=convenience.
+    It just needs a bit of manipulation and error checking in the python
+    code to add this.
+    	 Done in SVN Version 47 of townguide.py
+
+6.  Tidy up features output to remove duplicates if a feature is tagged
+    as both a node and an area. - now done - output works in HTML but
+    PDF still uses old format.

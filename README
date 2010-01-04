@@ -1,0 +1,13 @@
+TOWNGUIDE README
+================
+
+This directory is the source code distribution for the townguide program to 
+produce a simple guide to an area using OpenStreetMap data.
+
+For details of configuration and dependencies, please type:
+    pydoc townguide
+
+This program is Copyright Graham Jones, 2009.  It is released under the 
+GNU Public License as described in the COPYING file provided with this
+distribution.
+

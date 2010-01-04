@@ -1,0 +1,15 @@
+TOWNGUIDE INSTALLATION INTRUCTIONS
+==================================
+
+Tonwguide does not require specific installation - just unpack the source
+into a directory.
+
+It can then be run using <srcdir>/townguide.py [configfile.xml]
+
+Type 
+     pydoc townguide
+in the installation directory to see instructions on the structure of the 
+configuration file and other dependencies.
+
+If you have trouble, please contact Graham Jones (grahamjones139 at gmail.com).
+

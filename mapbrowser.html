@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>TownGuide Map Browser</title>
+    <script>
+      function init() 
+      {
+      //alert("init()"+document.url)
+      var params = document.location.search.substr(1,document.location.search.length).split('&');
+      var arguments = Array();
+      for(var i=0;i<params.length;i++) 
+		      {
+		      var arg = params[i].split("=");
+		      arguments[arg[0]] = arg[1];
+		      }
+      //alert(arguments['cell'])
+      //alert(arguments['name'])
+      document.getElementById('map').innerHTML="<image width=50% src=\'hartlepool/"+arguments['cell']+".png\'>"
+      texturl = "hartlepool/"+arguments['cell']+".html"
+		      //alert(texturl)
+      htmltxt="<iframe width=50% src="+texturl+">testing iframe</iframe>"
+      document.getElementById('text').innerHTML=htmltxt
+      }
+    </script>
+  </head>
+  <body onload='init()'>
+    <div id='map'><p>map div</p></div>
+    <div id='text'><p>text div</p></div>
+    <form>
+      <input id='cell'>
+      <input name='name'>
+    </form>
+    
+  </body>
+</html>

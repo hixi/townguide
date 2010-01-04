@@ -1,0 +1,9 @@
+TOWNGUIDE CHANGE LOG
+====================
+
+SVN Revision 43 - Working version producing html output.
+SVN REVISION 50 - Produces PDF output using LaTeX (townguide V0.1)
+svn Revision 58 - Added PDF Poster output using ReportLabs library
+                - Split source into separate base program and renderers.
+SVN Revision 63 - posterRenderer working - configurable from XML file.
+SVN Revision 64 - Extended townguide to populate database if requested in configuration file by downloading from OSM server.
