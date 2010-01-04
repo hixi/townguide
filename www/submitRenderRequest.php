@@ -17,12 +17,6 @@
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
 
-  print "$title<br>";
-  print $lat.",".$lon." <br>";
-  print $nx.",".$ny." <br>";
-  print "streetIndex:".$streetIndex." <br>";
-  print "featureList:".$featureList." <br>";
-
   $fname = "/home/disk2/www/townguide/www/output/townguide.xml";
   $fh = fopen($fname,'w') or die("failed to open file ".$fname);
   
@@ -100,7 +94,6 @@
   $output = null;
 
   $cmdstr = "/home/disk2/www/townguide/townguide.py ".$fname." 2>&1";
-  print $cmdstr."<br>";
   exec($cmdstr, $output);
 
   print "<a href='output'>Click here to see your output</a>";
