@@ -38,9 +38,9 @@ class posterRenderer():
     http://www.hoboes.com/Mimsy/hacks/multiple-column-pdf/, for which I am
     extremely grateful.
 
-    $LastChangedDate: 2010-01-02 15:58:48 +0000 (Sat, 02 Jan 2010) $
-    $Rev: 70 $
-    $Author: grahamjones139 $
+    $LastChangedDate$
+    $Rev$
+    $Author$
     """
     def __init__(self,tg):
         """
@@ -322,7 +322,7 @@ class posterRenderer():
         canvas.setFont('Times-Roman',9)
         canvas.drawString(doc.leftMargin, (doc.bottomMargin/2), "Page %s" \
                           % doc.page)
-        revStr = "$Rev: 70 $"
+        revStr = "$Rev$"
         revStr = revStr.split(':')[1]
         revStr = revStr.split('$')[0]
         canvas.drawRightString(doc.leftMargin+doc.width, (doc.bottomMargin/2),

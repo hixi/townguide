@@ -94,9 +94,9 @@ highway='residential',
 <debug>False</debug>
 </xml>
 
-$LastChangedDate: 2010-01-03 21:38:29 +0000 (Sun, 03 Jan 2010) $
-$Rev: 78 $
-$Author: grahamjones139 $
+$LastChangedDate$
+$Rev$
+$Author$
 """
 from prefs import prefs
 import sys
@@ -191,6 +191,8 @@ class townguide:
         self.title = pl['title']
         self.outdir = pl['outdir']
 
+        if not os.path.exists(self.outdir):
+            os.makedirs(self.outdir)
 
         downloadStr = pl['download']
         downloadStr = downloadStr.lower()
@@ -199,8 +201,6 @@ class townguide:
         if downloadStr == 'true':
             self.populateDB()
 
-        if not os.path.exists(self.outdir):
-            os.makedirs(self.outdir)
 
 
         print "Extracting Map Features from Database"
@@ -766,7 +766,7 @@ if __name__ == "__main__":
     from optparse import OptionParser
 
     usage = "Usage %prog [options] filename"
-    version = "SVN Revision $Rev: 78 $"
+    version = "SVN Revision $Rev$"
     parser = OptionParser(usage=usage,version=version)
     parser.add_option("-f", "--file", dest="outfile",
                       help="filename to use for output",
