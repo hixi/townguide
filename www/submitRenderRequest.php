@@ -98,6 +98,9 @@
 
   print "<a href='output'>Click here to see your output</a>";
 
+  <h2>Diagnostic Output Listing </h2>
+  <p>If you do not get the expected outut, the following listing should
+help work out why....</p>
   print "<pre>" . var_export($output,TRUE) . "</pre>\n";
 
 ?>
