@@ -18,196 +18,384 @@
 #
 #    Copyright Graham Jones 2009
 #
-
-import sys
-
-#from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-#from reportlab.lib.styles import getSampleStyleSheet
-#from reportlab.rl_config import defaultPageSize
-#from reportlab.lib.units import inch
-#from reportlab.lib import pagesizes
-
-#PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
-#styles = getSampleStyleSheet()
+import reportlab.platypus as platypus 
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.rl_config import defaultPageSize
+from reportlab.lib.units import cm
+from reportlab.lib import pagesizes
+from reportlab.graphics.shapes import Rect
+from reportlab.lib.colors import *
 
 
-class bookRenderer(): 
+
+class bookRenderer():
+    """
+    A townguide plugin to produce a booklet containing an overview map,
+    detailed large scale maps, street index and identify selected map features
+    as a PDF file.
+    It uses the reportlab platypus library to produce the PDF file.
+    A lot of useful information was found at
+    http://www.hoboes.com/Mimsy/hacks/multiple-column-pdf/, for which I am
+    extremely grateful.
+
+    $LastChangedDate$
+    $Rev$
+    $Author$
+    """
     def __init__(self,tg):
+        """
+        Initialise the bookRenderer - called by townguide.py
+        tg should be the instance of townguide used to call this function.
+        It is used to provide the user selectable parameters as the
+        tg.pl[] dictionary.
+        The following paramaters are used from the tg.pl[] dictionary:
+         - pagesize : the required output page size (A4, A3 etc) - default A4
+         - mapvfrac : the vertical fraction of the page to be filled by the map (%) - default 80
+        """
         print "bookRenderer.init()"
         self.tg = tg
 
-#        pageSizeDict = {
-#            'letter': pagesizes.letter,
-#            'A6': pagesizes.A6,
-#            'A5': pagesizes.A5,
-#            'A4': pagesizes.A4,
-#            'A3': pagesizes.A3,
-#            'A2': pagesizes.A2,
-#            'A1': pagesizes.A1,
-#            'A0': pagesizes.A0
-#            }
-#        self.pagesize = pageSizeDict.get(self.tg.pl['pagesize'])
+        defPrefs = {
+            'pagesize': 'A4',
+            'mapvfrac': '80',
+            'bottomMargin': '30',
+            'topMargin': '72',
+            'leftMargin': '10',
+            'rightMargin': '10',
+            'titleFrameHeight': '50',
+            'logoFrac': '30',        # Vertical fraction of front page for logo
+            'columnWidth': '5',
+            'streetIndex': 'True',
+            'featureList': 'True',
+            'features': "Banking:amenity='bank'|'atm',"\
+            "Shopping:shop='mall'|'supermarket'|'convenience'|'alcohol'|'baker'"
+            }
 
-#        if self.pagesize == None:
-#            print ("ERROR - Pagesize %s unrecognised - Using A4 instead\n" \
-#                   % ps_str)
-#            self.pagesize = pagesizes.A4
-
-            
-
-
-    def renderPDF(self):
-        print "Rendering PDF File using pdfLatex"
-        outpath = "%s/%s.tex" % (self.tg.outdir,self.tg.outdir)
-        f = open(outpath,"w")
-        f.write("\\documentclass{book}\n")
-        f.write("\\usepackage{graphicx}\n")
-        f.write("\\renewcommand{\\topfraction}{0.9}")
-        f.write("\\renewcommand{\\bottomfraction}{0.8}")
-        f.write("\\renewcommand{\\floatpagefraction}{0.7}")
-        f.write("\\renewcommand{\\textfraction}{0.07}")
-        f.write("\\begin{document}\n")
-        f.write("\\parindent 0pt\n")
-        f.write("\\parskip 12pt\n")
-        f.write("\\title{%s}\n" % self.tg.title)
-        f.write("\\author{Graham Jones}")
-        f.write("\\maketitle\n")
-        f.write("\\tableofcontents\n")
-
-        ############### Introduction #########################
-        f.write("\\chapter{Introduction}\n")
-        f.write("This document contains provided by OpenStreetMap \n")
-        f.write("(http://www.openstreetmap.org).\n\n")
-        f.write("OpenStreetMap data is provided freely by volunteers.  When you identify\n")
-        f.write("errors or omissions in the data, please report them at\n")
-        f.write("OpenStreetBugs (http://www.openstreetbugs.org)\n")
-        f.write("or join OpenStreetMap and improve the data yourself!\n\n")
-        f.write("This document was produced by 'TownGuide' (http://code.google.com/p/ntmisc)\n\n")
-        f.write("\\copyright Graham Jones, 2009.\n")
-
-        ############### Overview Map Page ######################
-        f.write("\\chapter{Overview}\n")
-        f.write("\\begin{figure}[h]\n")
-        f.write("\\caption{Overview Map}\n")
-        f.write("\\includegraphics[width=5cm]{overview.png}\n")
-        #f.write("\\includegraphics[width=5cm]{%s/overview.png}\n" % self.tg.outdir)
-        f.write("\\end{figure}\n")
-
-        ############### Street Index ###########################
-        f.write("\\chapter{Street Index}\n")
-
-        # render the streets in aphabetical order
-        streets = self.tg.streetIndex.keys()
-        streets.sort()
-        f.write("\\begin{table}[h]\n")
-        f.write("\\caption{Alphabetical Street Index}\n")
-        f.write("\\begin{tabular}{|l|l|}\\hline\n")
-        f.write("\\textbf{\\textsc{Street Name}}&\\textbf{\\textsc{Grid Ref}}\\\\ \\hline\n")
-        for street in streets:
-            f.write("%s&%s\\\\ \\hline\n" % (street,self.tg.streetIndex[street]))
-        f.write("\\end{tabular}\n\\end{table}\n")
-
+        tg.pr.applyDefaults(defPrefs)
         
+        self.setStyles()
 
 
 
-        ############### Features ###############################
-        f.write("\\chapter{Features}\n")
-        featurelist = self.tg.amenities.keys()
-        print self.tg.amenities
-        featurelist.sort()
-        for feature in featurelist:
-            f.write("\\section{%s}\n" % feature)
-            f.write("\\begin{table}[h]\n")
-            f.write("\\caption{%s}\n" % feature)
-            f.write("\\begin{tabular}{|l|l|}\\hline\n")
-            f.write("\\textbf{\\textsc{Name}}&\\textbf{\\textsc{Grid Ref}}\\\\ \\hline\n")
-            for rec in self.tg.amenities[feature]:
-                print rec
-                lbl = self.tg.cellLabel(rec[0],rec[1])
-                name = rec[2][1]
-                #f.write("%s %s <br>" % (lbl,name))
-                f.write("%s&%s\\\\ \\hline\n" % (lbl,name))
-            f.write("\\end{tabular}\n\\end{table}\n")
-                    
 
+    def setStyles(self):
+        pageSizeDict = {
+            'letter': pagesizes.letter,
+            'A6': pagesizes.A6,
+            'A5': pagesizes.A5,
+            'A4': pagesizes.A4,
+            'A3': pagesizes.A3,
+            'A2': pagesizes.A2,
+            'A1': pagesizes.A1,
+            'A0': pagesizes.A0
+            }
+        self.pagesize = pageSizeDict.get(self.tg.pl['pagesize'])
 
-        ############### End of Latex Document ##################
-        f.write("\\end{document}\n");
+        if self.pagesize == None:
+            print ("ERROR - Pagesize %s unrecognised - Using A4 instead\n" \
+                   % ps_str)
+            self.pagesize = pagesizes.A4
 
-        f.close()
+        (self.pageX,self.pageY) = self.pagesize
 
-        ############### Run Latex to Create PDF ################
-        import subprocess
-        command = "cd %s; pdflatex %s.tex" % (self.tg.outdir,self.tg.outdir)
-        self.latex_proc = subprocess.Popen(command,shell=True)
-        if self.latex_proc!=None:
-            #print "latex_proc exists - checking status.."
-            self.latex_proc.poll()
-            if (self.latex_proc.returncode==None):
-                print "latex still alive - waiting"
-                finished=False
-                while (finished!=True):
-                    self.latex_proc.poll()
-                    if (self.latex_proc.returncode!=None):
-                        print "latex finished."
-                        finished = True
-            else:
-                print "latex already dead - noting to do!"
+        print "pagesize = %f, %f" % (self.pageX,self.pageY)
+                
 
-        ########## Run Latex Again to do Table of Contents to ############
-        command = "cd %s; pdflatex %s.tex" % (self.tg.outdir,self.tg.outdir)
-        self.latex_proc = subprocess.Popen(command,shell=True)
-        if self.latex_proc!=None:
-            #print "latex_proc exists - checking status.."
-            self.latex_proc.poll()
-            if (self.latex_proc.returncode==None):
-                print "latex still alive - waiting"
-                finished=False
-                while (finished!=True):
-                    self.latex_proc.poll()
-                    if (self.latex_proc.returncode!=None):
-                        print "latex finished."
-                        finished = True
-            else:
-                print "latex already dead - noting to do!"
+        self.styles = getSampleStyleSheet()
 
+        #print dir(self.styles)
+        #self.styles.list()
 
+        self.mf = float(self.tg.pl['mapvfrac'])/100.
+        self.topMargin=int(self.tg.pl['topMargin'])
+        self.bottomMargin=int(self.tg.pl['bottomMargin'])
+        self.leftMargin=int(self.tg.pl['leftMargin'])
+        self.rightMargin=int(self.tg.pl['leftMargin'])
 
-#    def posterPage(self,canvas,doc):
-#        canvas.saveState()
-#        canvas.setFont('Times-Bold',16)
-#        canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT-108, self.tg.title)
-#        canvas.setFont('Times-Roman',9)
-#        canvas.drawString(inch, 0.75 * inch, "Page / %s" % "parameter")
-#        canvas.restoreState()
+        self.titleFrameHeight = int(self.tg.pl['titleFrameHeight'])
+        self.columnWidth = float(self.tg.pl['columnWidth'])
+        
+        self.titleStyle = self.styles["Title"]
+        self.titleStyle.fontSize = 40
+        self.titleStyle.fontSize*1.1
 
 
     def render(self):
         print "bookRenderer.render()"
-        self.renderPDF()
-#        doc = SimpleDocTemplate("townguide_poster.pdf",pagesize=self.pagesize)
-#        Story = [Spacer(1,2*inch)]
-#        style = styles["Normal"]
+        outpath = "%s/townguide_book.pdf" % self.tg.outdir
 
-#        im = Image("%s/%s" % (self.tg.outdir,"overview.png"),
-#                   width=2*inch, height=2*inch)
-#        im.hAlign = 'CENTER'
-#        Story.append(im)
-#        Story.append(Spacer(1,0.2*inch))
+        doc = platypus.BaseDocTemplate(outpath,pagesize=self.pagesize)
+        doc.leftMargin = self.leftMargin
+        doc.rightMargin = self.rightMargin
+        doc.topMargin = self.topMargin
+        doc.bottomMargin = self.bottomMargin
+        doc.width = self.pagesize[0] - self.leftMargin - self.rightMargin
+        doc.height = self.pagesize[1] - self.topMargin - self.bottomMargin
 
-#        bogustext = ("This is Paragraph ")
-#        p = Paragraph(bogustext, style)
-#        Story.append(p)
+        ##################################
+        # Set up the front page template #
+        ##################################
+        # titleframe spans whole page.
+        titleframe = platypus.Frame(doc.leftMargin,\
+                                  doc.bottomMargin+doc.height\
+                                    - self.titleFrameHeight,\
+                                  doc.width,\
+                                  self.titleFrameHeight,\
+                                  showBoundary=True)
+        lf = float(self.tg.pl['logoFrac'])/100.
+        logoframe= platypus.Frame(doc.leftMargin,\
+                                  doc.bottomMargin \
+                                  + doc.height*(1-lf)\
+                                  - self.titleFrameHeight,\
+                                  doc.width,\
+                                  doc.height*lf,\
+                                  showBoundary=True,
+                                  leftPadding=0,
+                                  rightPadding=0,
+                                  topPadding=0,
+                                  bottomPadding=0)
 
+        frontPageFrames = [titleframe,logoframe]
+
+
+
+
+        #####################################################
+        # Set up the second (OSM information) page Template #
+        #####################################################
+        titleframe = platypus.Frame(doc.leftMargin,\
+                                  doc.bottomMargin+doc.height\
+                                    - self.titleFrameHeight,\
+                                  doc.width,\
+                                  self.titleFrameHeight,\
+                                  showBoundary=True)
+        bodyframe = platypus.Frame(doc.leftMargin,\
+                                  doc.bottomMargin \
+                                  + doc.height \
+                                  - self.titleFrameHeight,\
+                                  doc.width,\
+                                  doc.height - self.titleFrameHeight,\
+                                  showBoundary=True,
+                                  leftPadding=0,
+                                  rightPadding=0,
+                                  topPadding=0,
+                                  bottomPadding=0)
+
+        infoPageFrames=[titleframe,bodyframe]
+
+
+        #########################################
+        # Set up the Overview Map Page Template #
+        #########################################
+        
+        # mapframe spans whole page and goes to half way down the page
+        print "self.mf=%f." % self.mf
+        mapframe = platypus.Frame(doc.leftMargin,\
+                                  doc.bottomMargin \
+                                  + doc.height*(1-self.mf),\
+                                  doc.width,\
+                                  doc.height*self.mf,\
+                                  showBoundary=True,
+                                  leftPadding=0,
+                                  rightPadding=0,
+                                  topPadding=0,
+                                  bottomPadding=0)
+
+        # Now work out how big the actual map will be (depends on the
+        #   aspect ratio of the area to be mapped).
+        self.mapY = mapframe.height        \
+                    - mapframe.topPadding \
+                    - mapframe.bottomPadding
+        self.mapX = self.mapY * self.tg.nx/self.tg.ny
+        if (self.mapX > \
+            (mapframe.width-mapframe.leftPadding-mapframe.rightPadding)):
+            self.mapX = mapframe.width \
+                        - mapframe.leftPadding \
+                        - mapframe.rightPadding
+            self.mapY = self.mapX * self.tg.ny/self.tg.nx
+        print "mapsize = %f, %f" % (self.mapX, self.mapY)
+
+        # how much space is there next to the map - can we fit some columns
+        # in there?
+        sparew = mapframe.width \
+                 + mapframe.leftPadding\
+                 + mapframe.rightPadding\
+                 - self.mapX
+
+        mapframe.width -= sparew
+
+        overviewPageFrames = [mapframe]
+
+        if sparew > self.columnWidth*cm:
+            print "adding extra frames next to map"
+            colCount = int(sparew / (self.columnWidth*cm))
+            colWidth = (sparew)/colCount
+            colHeight = doc.height*self.mf   #same as map.
+
+            for colNo in range(colCount):
+                leftMargin = doc.leftMargin + \
+                             mapframe.width + \
+                             mapframe.leftPadding + \
+                             mapframe.rightPadding + \
+                             colNo*colWidth
+                column = platypus.Frame(leftMargin,\
+                                        doc.bottomMargin \
+                                        +doc.height*(1-self.mf) \
+                                        - self.titleFrameHeight,\
+                                        colWidth,colHeight,\
+                                        showBoundary=True)
+                overviewPageFrames.append(column)
+
+
+        # the columns occupy the bottom half of the page.
+        colCount = int(doc.width / (self.columnWidth*cm))
+        colWidth = (doc.width)/colCount
+        colHeight = doc.height*(1-self.mf) - self.titleFrameHeight
+
+        for colNo in range(colCount):
+            leftMargin = doc.leftMargin + colNo*colWidth
+            column = platypus.Frame(leftMargin,doc.bottomMargin,\
+                                    colWidth,colHeight,\
+                                    showBoundary=True)
+            overviewPageFrames.append(column)
+
+
+        ################################################################    
+        # Set up the overflow pages - just the title frame and columns.#
+        ################################################################
+        overflowPageFrames = []
+        colHeight = doc.height 
+        for colNo in range(colCount):
+            leftMargin = doc.leftMargin + colNo*colWidth
+            column = platypus.Frame(leftMargin,doc.bottomMargin,\
+                                    colWidth,colHeight,\
+                                    showBoundary=True)
+            overflowPageFrames.append(column)
+        
+
+
+        templates = [platypus.PageTemplate(frames=frontPageFrames,\
+                                           id="frontpage",
+                                           onPage = self.decoratePage),\
+                     platypus.PageTemplate(frames=infoPageFrames,\
+                                           id="infopage",
+                                           onPage = self.decoratePage),\
+                     platypus.PageTemplate(frames=overviewPageFrames,\
+                                           id="overviewpage",
+                                           onPage = self.decoratePage),\
+                     platypus.PageTemplate(frames=overflowPageFrames,\
+                                           id="overflowpage",
+                                           onPage = self.decoratePage)\
+                     ]
+        doc.addPageTemplates(templates)
+        ##############################################################
+        #          Now Add the Content                               #
+        ##############################################################
+        
+        style = self.styles["Normal"]
+        Story = []
+
+        # Title Page
+        Story.append(platypus.Paragraph(self.tg.title,self.styles["Title"]))
+        Story.append(platypus.FrameBreak())
+        Story.append(platypus.Paragraph("Logo to go here",\
+                                        self.styles["Heading1"]))
+        Story.append(platypus.NextPageTemplate("infopage"))
+        Story.append(platypus.PageBreak())
+
+        # Info Page
+        Story.append(platypus.Paragraph("info page title",self.styles["Title"]))
+        Story.append(platypus.FrameBreak())
+        Story.append(platypus.Paragraph("Info goes here",\
+                                        self.styles["Heading1"]))
+        Story.append(platypus.NextPageTemplate("overviewpage"))
+        Story.append(platypus.PageBreak())
+
+        ###############################################################
+        # Render the map, and add it to the page
+
+        self.tg.oscale =  1000. *  self.tg.nx / self.mapX / 2
+        self.tg.drawOverviewMap(self.tg.outdir,addFeatures=True)
+
+        im = Image("%s/%s" % (self.tg.outdir,"overview.png"),
+                   width=self.mapX, height=self.mapY)
+        im.hAlign = 'CENTER'
+        Story.append(im)
+        # Once we have rendered the map image, we need to go to the next frame.
+        Story.append(platypus.FrameBreak())
+        Story.append(platypus.NextPageTemplate("overflowpage"))
+
+        ################################################################
         # render the streets in aphabetical order
-#        streets = self.tg.streetIndex.keys()
-#        streets.sort()
-#        for street in streets:
-#            print("%s (%s)<br>" % (street,self.tg.streetIndex[street]))
-#            p = Paragraph("%s (%s)" % (street,self.tg.streetIndex[street]),style)
-#            Story.append(p)
+        if self.tg.pl['streetIndex'].lower()=='true':
+            style.fontName = "Times-Bold"
+            Story.append(platypus.Paragraph("Street Index",style))
+            style.fontName = "Times-Roman"
+            streets = self.tg.streetIndex.keys()
+            streets.sort()
+            for street in streets:
+                p = Paragraph("%s (%s)" \
+                              % (street,self.tg.streetIndex[street]),style)
+                Story.append(p)
 
 
-#        doc.build(Story, onFirstPage=self.posterPage)
-            
+        if self.tg.pl['featureList'].lower()=='true':
+            #Do not do a frame break if this is the first frame.
+            if self.tg.pl['streetIndex'].lower()=='true':
+                Story.append(platypus.FrameBreak())
+            style.fontName = "Times-Bold"
+            Story.append(platypus.Paragraph("Points of Interest",style))
+            style.fontName = "Times-Roman"
+            featurelist = self.tg.amenities.keys()
+            #print self.tg.amenities
+            featurelist.sort()
+            featureNo = 1
+            for feature in featurelist:
+                style.fontName = "Times-Bold"
+                Story.append(platypus.Paragraph(feature,style))
+                style.fontName = "Times-Roman"
+                for rec in self.tg.amenities[feature]:
+                    #print rec
+                    lbl = self.tg.cellLabel(rec[0],rec[1])
+                    name = rec[2][1]
+                    p = Paragraph("%d: %s (%s)" % (featureNo,name,lbl),style)
+                    Story.append(p)
+                    featureNo+=1
+
+
+
+
+        if self.tg.pl['debug'].lower()=='true': 
+            # This adds some padding to test the overflow page function.
+            for n in range(100):
+                p = Paragraph("Para %d - switch off debug mode to remove!!" %\
+                              n,style)
+                Story.append(p)
+
+        # This line is important - it actually generates the PDF file.
+        doc.build(Story)   
+
+
+    def decoratePage(self,canvas,doc):
+        print "decoratePage"
+        PAGE_HEIGHT=self.pagesize[1]; PAGE_WIDTH=self.pagesize[0]
+        canvas.saveState()
+        canvas.setFillColorRGB(0.9,0.9,0.9)
+        canvas.rect(5, 5, PAGE_WIDTH-10, PAGE_HEIGHT-10,fill=1)
+        canvas.restoreState()
+        canvas.saveState()
+        canvas.setFont('Times-Bold',16)
+        canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT-(doc.topMargin/2), self.tg.title)
+        canvas.setFont('Times-Roman',9)
+        canvas.drawString(doc.leftMargin, (doc.bottomMargin/2), "Page %s" \
+                          % doc.page)
+        revStr = "$Rev$"
+        revStr = revStr.split(':')[1]
+        revStr = revStr.split('$')[0]
+        canvas.drawRightString(doc.leftMargin+doc.width, (doc.bottomMargin/2),
+                               "Output Produced by townguide posterRenderer "\
+                               "Version %s.       Map data (c) OpenStreetMap and "\
+                               "contributors, CC-BY-SA" % revStr)
+        canvas.restoreState()
+

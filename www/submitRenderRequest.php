@@ -78,6 +78,10 @@
     $featureStr = $featureStr."Leisure:amenity='bank'|'atm'"; 
   } 
 
+  if ($featureStr=="") {
+        $featureStr="None:amenity='none'";
+  } 
+
   fwrite($fh,"<features>\n".$featureStr."</features>\n");
 
   fwrite($fh,"<mapvfrac>75</mapvfrac>\n");
@@ -98,10 +102,12 @@
 
   print "<a href='output'>Click here to see your output</a>";
 
-  <h2>Diagnostic Output Listing </h2>
-  <p>If you do not get the expected outut, the following listing should
-help work out why....</p>
+
+
+  print "<h2>Diagnostic Output Listing </h2>";
+  print "<p>If you do not get the expected outut, the following listing should";
+  print "help work out why....</p>";
   print "<pre>" . var_export($output,TRUE) . "</pre>\n";
 
-?>
 
+?>

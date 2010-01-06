@@ -7,3 +7,7 @@ svn Revision 58 - Added PDF Poster output using ReportLabs library
                 - Split source into separate base program and renderers.
 SVN Revision 63 - posterRenderer working - configurable from XML file.
 SVN Revision 64 - Extended townguide to populate database if requested in configuration file by downloading from OSM server.
+
+SVN Revision 6  - 05jan2010 Moved code repository to 
+    	     	  http://code.google.com/p/townguide, which re-set the 
+		  revision numbers.

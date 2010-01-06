@@ -7,6 +7,10 @@ produce a simple guide to an area using OpenStreetMap data.
 For details of configuration and dependencies, please type:
     pydoc townguide
 
+The source code also includes a very simple web service for requesting
+map production - see it in action at http://www.townguide.webhop.net.
+
+
 This program is Copyright Graham Jones, 2009.  It is released under the 
 GNU Public License as described in the COPYING file provided with this
 distribution.

@@ -216,7 +216,7 @@ class townguide:
             tr = htmlRenderer(self)
             tr.render()
             #self.renderHTML()
-        elif pl['format']=='pdf':
+        elif pl['format']=='book':
             #self.renderPDF()
             self.drawOverviewMap(self.outdir)
             tr = bookRenderer(self)
