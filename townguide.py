@@ -255,14 +255,29 @@ class townguide:
                     
 
 
-
+    def drawTile(self,tx,ty):
+        minx = self.c0.x + self.slen * tx
+        miny = self.c0.y + self.slen * ty
+        bbox = mapnik.Envelope(minx,\
+                               miny,\
+                               minx+self.slen,\
+                            miny+self.slen)
+        # First draw the basic map using mapnik.
+        fname = "%s/image_%02d_%02d.png" % (self.pl['outdir'],tx,ty)
         
-    def drawTile(self,bbox,imgx,imgy,fname):
+        imgx = int(self.slen/self.oscale)
+        imgy = int(self.slen/self.oscale)
+        self.drawTile_bbox(bbox,imgx,imgy,fname)
+
+        return fname
+        
+    def drawTile_bbox(self,bbox,imgx,imgy,fname):
         """Call Mapnik to draw a map image for data in
         bounding box bbox.  The image size is imgx by imgy pixels, and
         the output filename is fname.
 
         29sep2009  GJ  ORIGINAL VERSION, based on generate_image.py
+        06jan2010  GJ  Renamed to drawTile_bbox from drawTile
         """
         #try:
         #    mapfile = mapnik.os.environ['MAPNIK_MAP_FILE']
@@ -298,7 +313,7 @@ class townguide:
                                c0.y,\
                                c0.x+self.slen*self.nx,\
                                c0.y+self.slen*self.ny)
-        self.drawTile(bbox,
+        self.drawTile_bbox(bbox,
                       int(self.slen*self.nx/scale),
                       int(self.slen*self.ny/scale),
                       fname)

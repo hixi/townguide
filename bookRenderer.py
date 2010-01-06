@@ -20,10 +20,11 @@
 #
 import reportlab.platypus as platypus 
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-from reportlab.lib.styles import getSampleStyleSheet
+import reportlab.lib.styles as styles
 from reportlab.rl_config import defaultPageSize
 from reportlab.lib.units import cm
 from reportlab.lib import pagesizes
+from reportlab.platypus.flowables import KeepInFrame 
 from reportlab.graphics.shapes import Rect
 from reportlab.lib.colors import *
 
@@ -57,6 +58,7 @@ class bookRenderer():
         self.tg = tg
 
         defPrefs = {
+            'imagePath': '/home/disk2/www/townguide/images',
             'pagesize': 'A4',
             'mapvfrac': '80',
             'bottomMargin': '30',
@@ -102,7 +104,7 @@ class bookRenderer():
         print "pagesize = %f, %f" % (self.pageX,self.pageY)
                 
 
-        self.styles = getSampleStyleSheet()
+        self.styles = styles.getSampleStyleSheet()
 
         #print dir(self.styles)
         #self.styles.list()
@@ -171,9 +173,7 @@ class bookRenderer():
                                   self.titleFrameHeight,\
                                   showBoundary=True)
         bodyframe = platypus.Frame(doc.leftMargin,\
-                                  doc.bottomMargin \
-                                  + doc.height \
-                                  - self.titleFrameHeight,\
+                                  doc.bottomMargin, \
                                   doc.width,\
                                   doc.height - self.titleFrameHeight,\
                                   showBoundary=True,
@@ -193,7 +193,8 @@ class bookRenderer():
         print "self.mf=%f." % self.mf
         mapframe = platypus.Frame(doc.leftMargin,\
                                   doc.bottomMargin \
-                                  + doc.height*(1-self.mf),\
+                                  + doc.height*(1-self.mf)\
+                                  - self.titleFrameHeight,\
                                   doc.width,\
                                   doc.height*self.mf,\
                                   showBoundary=True,
@@ -225,7 +226,7 @@ class bookRenderer():
 
         mapframe.width -= sparew
 
-        overviewPageFrames = [mapframe]
+        overviewPageFrames = [titleframe,mapframe]
 
         if sparew > self.columnWidth*cm:
             print "adding extra frames next to map"
@@ -260,6 +261,43 @@ class bookRenderer():
                                     showBoundary=True)
             overviewPageFrames.append(column)
 
+        #########################################
+        # Set up the Detail Map Page Template #
+        #########################################
+        
+        # mapframe spans whole page and goes to half way down the page
+        print "self.mf=%f." % self.mf
+        # Note, we are using a square map, so doc.width = map.height
+        detailmapframe = platypus.Frame(doc.leftMargin,\
+                                        doc.bottomMargin \
+                                        + doc.height-doc.width\
+                                        - self.titleFrameHeight,\
+                                        doc.width,\
+                                        doc.width,\
+                                        showBoundary=True,
+                                        leftPadding=0,
+                                        rightPadding=0,
+                                        topPadding=0,
+                                        bottomPadding=0)
+
+        detailPageFrames = [titleframe,detailmapframe]
+
+
+        # the columns occupy the bottom of the page.
+        # again it is a square map, of height=width.
+        colCount = int(doc.width / (self.columnWidth*cm))
+        colWidth = (doc.width)/colCount
+        colHeight = doc.height-doc.width - self.titleFrameHeight
+
+        for colNo in range(colCount):
+            leftMargin = doc.leftMargin + colNo*colWidth
+            column = platypus.Frame(leftMargin,doc.bottomMargin,\
+                                    colWidth,colHeight,\
+                                    showBoundary=True)
+            detailPageFrames.append(column)
+
+
+
 
         ################################################################    
         # Set up the overflow pages - just the title frame and columns.#
@@ -284,6 +322,9 @@ class bookRenderer():
                      platypus.PageTemplate(frames=overviewPageFrames,\
                                            id="overviewpage",
                                            onPage = self.decoratePage),\
+                     platypus.PageTemplate(frames=detailPageFrames,\
+                                           id="detailpage",
+                                           onPage = self.decoratePage),\
                      platypus.PageTemplate(frames=overflowPageFrames,\
                                            id="overflowpage",
                                            onPage = self.decoratePage)\
@@ -299,21 +340,62 @@ class bookRenderer():
         # Title Page
         Story.append(platypus.Paragraph(self.tg.title,self.styles["Title"]))
         Story.append(platypus.FrameBreak())
-        Story.append(platypus.Paragraph("Logo to go here",\
-                                        self.styles["Heading1"]))
+        im = Image("%s/%s" % (self.tg.pl['imagePath'],"Openstreetmap_logo.png"))
+        im.hAlign = 'CENTER'
+        style.alignment=styles.TA_CENTER
+        Story.append(KeepInFrame(doc.width,doc.height*lf,
+                                 [im,
+                                  platypus.Paragraph(\
+                                      "Produced from OpenStreetMap Data",
+                                      style)
+                                  ]))
+        style.alignment=styles.TA_LEFT
         Story.append(platypus.NextPageTemplate("infopage"))
         Story.append(platypus.PageBreak())
 
         # Info Page
-        Story.append(platypus.Paragraph("info page title",self.styles["Title"]))
+        Story.append(platypus.Paragraph("Information",self.styles["Title"]))
         Story.append(platypus.FrameBreak())
-        Story.append(platypus.Paragraph("Info goes here",\
-                                        self.styles["Heading1"]))
+        Story.append(platypus.Paragraph("Map Data",\
+                                        self.styles["Heading2"]))
+        Story.append(platypus.Paragraph("The map data used to produce this book"\
+                                        " was provided by the OpenStreetMap"\
+                                        " project (http://www.openstreetmap.org)."\
+                                        ,\
+                                        self.styles["Normal"]))
+        Story.append(platypus.Paragraph(\
+            "OpenStreetMap data is provided freely by volunteers.",
+            self.styles["Normal"]))
+        Story.append(platypus.Paragraph(\
+            "When you identify errors or omissions,"\
+            " please report them at http://www.openstreetbugs.org"\
+            " or join OpenStreetMap and edit the map yourself!"
+            , self.styles["Normal"]))
+
+        Story.append(platypus.Paragraph("Output Generation",\
+                                        self.styles["Heading2"]))
+        Story.append(\
+            platypus.Paragraph(\
+                " This PDF output was produced using the TownGuide"\
+                " bookRenderer module (http://townguide.webhop.net)."\
+                ,\
+                self.styles["Normal"]))
+        Story.append(\
+            platypus.Paragraph(\
+                " The map images included in the PDF output was generated "\
+                " by mapnik (http://www.mapnik.org)."\
+                ,\
+                self.styles["Normal"]))
+
         Story.append(platypus.NextPageTemplate("overviewpage"))
         Story.append(platypus.PageBreak())
 
         ###############################################################
-        # Render the map, and add it to the page
+        # Render the overview map, and add it to the page
+
+        Story.append(platypus.Paragraph("Overview Map",self.styles["Title"]))
+        Story.append(platypus.FrameBreak())
+
 
         self.tg.oscale =  1000. *  self.tg.nx / self.mapX / 2
         self.tg.drawOverviewMap(self.tg.outdir,addFeatures=True)
@@ -373,8 +455,37 @@ class bookRenderer():
                               n,style)
                 Story.append(p)
 
+
+
+        #################################################################
+        # Now Add the detail map pages
+
+        for x in range(self.tg.nx):
+            for y in range(self.tg.ny):
+                Story.append(platypus.NextPageTemplate("detailpage"))
+                Story.append(platypus.PageBreak())
+                Story.append(platypus.NextPageTemplate("overflowpage"))
+                Story.append(\
+                    platypus.Paragraph("%s" % self.tg.cellLabel(x,y),
+                                       self.styles["Title"]))
+                Story.append(platypus.FrameBreak())
+
+                fname = self.tg.drawTile(x,y)
+                im = Image(fname,
+                           width=doc.width, height=doc.width)
+                im.hAlign = 'CENTER'
+                Story.append(im)
+                #Story.append(\
+                #    platypus.Paragraph("Map goes here",
+                #                       self.styles["Title"]))
+        
+
+        
+
         # This line is important - it actually generates the PDF file.
         doc.build(Story)   
+
+
 
 
     def decoratePage(self,canvas,doc):
