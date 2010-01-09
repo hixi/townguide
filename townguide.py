@@ -141,28 +141,32 @@ class townguide:
             }
 
         self.pr = pr
+        self.pl = pr.getPrefs()
+        print self.pl
+        print "datadir=%s" % self.pl['datadir']
         self.pr.applyDefaults(defaults)
-        pl = pr.getPrefs()
-        if pl['debug']=='True'\
-                        or pl['debug']=='true'\
-                        or pl['debug']=='TRUE':
+        self.pl = pr.getPrefs()
+        print "datadir=%s" % self.pl['datadir']
+        if self.pl['debug']=='True'\
+                        or self.pl['debug']=='true'\
+                        or self.pl['debug']=='TRUE':
             self.debug=True
         else:
             self.debug=False
 
 
-        (lat,lon) = pl['origin'].split(',')
+        (lat,lon) = self.pl['origin'].split(',')
         lon = float(lon)
         lat = float(lat)
-        (nx,ny)   = pl['mapsize'].split(',')
+        (nx,ny)   = self.pl['mapsize'].split(',')
         nx = int(nx)
         ny = int(ny)
-        slen      = float(pl['tilesize'])
-        oscale = float(pl['oscale'])
+        slen      = float(self.pl['tilesize'])
+        oscale = float(self.pl['oscale'])
 
         # self.features is the list of map features to be presented.
         self.features = []
-        featstrs = pl['features'].split(',')
+        featstrs = self.pl['features'].split(',')
         for feat in featstrs:
             self.features.append(str(feat.strip()))
         if self.debug: print self.features
@@ -179,22 +183,21 @@ class townguide:
         self.lat = lat
         self.lon = lon
 
-        self.pl = pl
         self.nx = nx
         self.ny = ny
         self.slen = slen
-        self.tilesize = float(pl['tilesize'])
+        self.tilesize = float(self.pl['tilesize'])
         self.oscale = oscale
-        self.uname = pl['uname']
-        self.dbname = pl['dbname']
+        self.uname = self.pl['uname']
+        self.dbname = self.pl['dbname']
 
-        self.title = pl['title']
-        self.outdir = pl['outdir']
+        self.title = self.pl['title']
+        self.outdir = self.pl['outdir']
 
         if not os.path.exists(self.outdir):
             os.makedirs(self.outdir)
 
-        downloadStr = pl['download']
+        downloadStr = self.pl['download']
         downloadStr = downloadStr.lower()
         print "downloadstr = %s" % downloadStr
 
@@ -210,22 +213,22 @@ class townguide:
         self.getAmenities()
         
 
-        if pl['format']=='html':
+        if self.pl['format']=='html':
             print "Rendering html map and text"
             self.drawOverviewMap(self.outdir)
             tr = htmlRenderer(self)
             tr.render()
             #self.renderHTML()
-        elif pl['format']=='book':
+        elif self.pl['format']=='book':
             #self.renderPDF()
             self.drawOverviewMap(self.outdir)
             tr = bookRenderer(self)
             tr.render()
-        elif pl['format']=='poster':
+        elif self.pl['format']=='poster':
             tr = posterRenderer(self)
             tr.render()
         else:
-            print "ERROR - Unrecognised Format %s." % pl['format']
+            print "ERROR - Unrecognised Format %s." % self.pl['format']
 
 
       #  self.showData()
@@ -321,7 +324,9 @@ class townguide:
         # Now add the grid and labels
         im = Image.open(fname)
         draw = ImageDraw.Draw(im)
-        fnt = ImageFont.truetype("%s/FreeSerif.ttf" % self.pl['datadir'], 12)
+        fntPath = "%s/FreeSerif.ttf" % self.pl['datadir']
+        print "fntPath = %s." % fntPath
+        fnt = ImageFont.truetype(fntPath, 12)
         for x in range(0,self.nx):
             xpx = x*self.slen/scale
             draw.line((xpx,0,xpx,im.size[1]), fill='white')
