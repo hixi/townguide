@@ -17,7 +17,7 @@
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
 
-  $fname = "/home/disk2/www/townguide/www/output/townguide.xml";
+  $fname = "/home/graham/townguide/src/www/output/townguide.xml";
   $fh = fopen($fname,'w') or die("failed to open file ".$fname);
   
   fwrite($fh,"<xml>\n");
@@ -85,19 +85,20 @@
   fwrite($fh,"<features>\n".$featureStr."</features>\n");
 
   fwrite($fh,"<mapvfrac>75</mapvfrac>\n");
-  fwrite($fh,"<datadir>/home/disk2/www/townguide</datadir>\n");
-  fwrite($fh,"<outdir>/home/disk2/www/townguide/www/output</outdir>\n");
-  fwrite($fh,"<mapfile>/home/disk2/www/townguide/osm.xml</mapfile>\n");
+  fwrite($fh,"<datadir>/home/graham/townguide/src</datadir>\n");
+  fwrite($fh,"<outdir>/home/graham/townguide/src/www/output</outdir>\n");
+  fwrite($fh,"<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>\n");
   fwrite($fh,"<origin>".$lat.",".$lon."</origin>\n");
   fwrite($fh,"<mapsize>".$nx.",".$ny."</mapsize>\n");
   fwrite($fh,"<uname>www</uname>\n");
+  fwrite($fh,"<password>1234</password>\n");
   fwrite($fh,"<download>True</download>\n");
   fwrite($fh,"</xml>\n");
   fclose($fh);
 
   $output = null;
 
-  $cmdstr = "/home/disk2/www/townguide/townguide.py ".$fname." 2>&1";
+  $cmdstr = "/home/graham/townguide/src/townguide.py ".$fname." 2>&1";
   exec($cmdstr, $output);
 
   print "<a href='output'>Click here to see your output</a>";

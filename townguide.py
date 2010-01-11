@@ -289,6 +289,7 @@ class townguide:
         #mapfile = "osm.xml"
         mapfile = str(self.pl['mapfile'])
         map_uri = str(fname)
+        print ("mapfile=%s" % mapfile)
 
         m = mapnik.Map(imgx,imgy)
         mapnik.load_map(m,mapfile)

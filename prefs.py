@@ -84,6 +84,19 @@ class prefs(handler.ContentHandler):
         except xml.sax._exceptions.SAXParseException:
             print "Error loading %s" % filename
 
+    def loadPrefsFromString(self, xmlStr):
+        """Load a Preferences XML string 'xmlStr' into memory and
+        return a dictionary 
+        containing the preferences specified in the file"""
+        try:
+            parser = make_parser()
+            parser.setContentHandler(self)
+            parser.parseString(xmlStr)
+            self.fname = filename
+            return self.tags
+        except xml.sax._exceptions.SAXParseException:
+            print "Error loading %s" % filename
+
 
 
     def applyDefaults(self,defs):

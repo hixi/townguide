@@ -3,6 +3,19 @@
 
 <title>TownGuide Generator</title>
 
+<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+<script type="text/javascript" src="/osm_map.js"></script>
+
+
+<script>
+function pageinit()
+{
+    init();
+}
+</script>
+
+
 <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -15,54 +28,60 @@ pageTracker._trackPageview();
 
 </head>
 
-<body>
-
-<h1>Request TownGuide Production</h1>
+<body onload='pageinit()'>
+<h3>Request TownGuide Production</h3>
 <FORM action="submitRenderRequest.php" method="POST">
-  Title: <INPUT type="text" name="title" value="Enter Title for your Town Guide" size="30" maxlength="50"><br/>
 <table>
-  <caption>Define Area to be Mapped</caption>
   <tbody>
     <tr>
-      <td colspan="4">Origin (bottom left corner)</td>
-    </tr>
-    <tr>
-      <td>lat:</td>
-      <td><INPUT type="text" name="lat" value="54.6466" size="10" maxlength="10"></td>
-      <td>lon:</td>
-      <td><INPUT type="text" name="lon" value="-1.2619" size="10" maxlength="10"></td>
-    </tr>
-    <tr>
-      <td colspan="4">Map size (in 1km units)</td>
-    </tr>
-    <tr>
-      <td>x:</td>
-      <td><INPUT type="text" name="nx" value="3" size="4" maxlength="4"></td>
-      <td>y:</td>
-      <td><INPUT type="text" name="ny" value="3" size="4" maxlength="4"><br>
-        </td>
-    </tr>
-    <tr>
-	<td>Output Format</td>
-	<td><SELECT name="format">
-<option value="html">HTML</option>
-  <option value="pdf">PDF Booklet</option>
-  <option selected value="poster">PDF Poster</option>
-  
-     </SELECT></td>
-	<td><SELECT name="papersize">
-	<option selected value="A4">A4</option>
-	<option value="A3">A3</option>
-	<option value="A2">A2</option>
-	<option value="A1">A1</option>
-	<option value="A0">A0</option>  
-     </SELECT></td>
-    </tr>
+      <td>
+	<div id="map", style="width:400pt; height:300pt"></div>
+      </td>
+      <td>
+	<table>
+	  <tr>
+	    <td>  Title:</td>
+	    <td colspan="3"> <INPUT type="text" name="title" value="Enter Title for your Town Guide" size="30" maxlength="50"><br/></td>
+	  <tr>
+	    <td colspan="4">Origin (bottom left corner)</td>
+	  </tr>
+	  <tr>
+	    <td>lat:</td>
+	    <td><INPUT type="text" id="lat" name="lat" value="54.6466" size="10" maxlength="10"></td>
+	    <td>lon:</td>
+	    <td><INPUT type="text" id="lon" name="lon" value="-1.2619" size="10" maxlength="10"></td>
+	  </tr>
+	  <tr>
+	    <td colspan="4">Map size (in 1km units)</td>
+	  </tr>
+	  <tr>
+	    <td>x:</td>
+	    <td><INPUT type="text" name="nx" value="3" size="4" maxlength="4"></td>
+	    <td>y:</td>
+	    <td><INPUT type="text" name="ny" value="3" size="4" maxlength="4"><br>
+            </td>
+	  </tr>
+	  <tr>
+	    <td>Output Format</td>
+	    <td><SELECT name="format">
+		<option value="html">HTML</option>
+		<option value="pdf">PDF Booklet</option>
+		<option selected value="poster">PDF Poster</option>
+		
+	    </SELECT></td>
+	    <td><SELECT name="papersize">
+		<option selected value="A4">A4</option>
+		<option value="A3">A3</option>
+		<option value="A2">A2</option>
+		<option value="A1">A1</option>
+		<option value="A0">A0</option>  
+	    </SELECT></td>
+	  </tr>
   </tbody>
-</table>
-<table>
-  <caption>Define Features to be Included in Output</caption>
-  <tbody>
+  </table>
+  <table>
+    <caption>Define Features to be Included in Output</caption>
+    <tbody>
     <tr>
       <td>Street Index</td>
       <td><INPUT type="checkbox" checked name="streetIndex"></td>
@@ -103,10 +122,34 @@ pageTracker._trackPageview();
       <td>Banking</td>
       <td><INPUT type="checkbox" checked name="banking"></td>
     </tr>
+
+      </table>
+      </td>
+    </tr>
   </tbody>
 </table>
 <INPUT type="submit">
 <h3>NOTE:  This can take some time (a few minutes) to run, so be patient!!</h3>
+        
+<table>
+    <tr class="bybbox label"><td colspan="2">Bounding box:</td></tr>
+
+    <tr class="bybbox field">
+    <td colspan="1" style="text-align: center;">
+        <div id="map_bb">
+            <input type="text" name="lat_upper_left" id="lat_upper_left"
+                   onchange="updateMap();" value="54.6462" /><br />
+            <input type="text" name="lon_upper_left" id="lon_upper_left"
+                   onchange="updateMap();" value="-1.2645" />
+            <input type="text" name="lon_bottom_right" id="lon_bottom_right"
+                   onchange="updateMap();" value="-1.17" /><br />
+            <input type="text" name="lat_bottom_right" id="lat_bottom_right"
+                   onchange="updateMap();" value="54.7" />
+        </div>
+        
+    </td></tr>
+
+</table>
 </FORM>
 
 
