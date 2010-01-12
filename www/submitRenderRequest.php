@@ -17,23 +17,22 @@
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
 
-  $fname = "/home/graham/townguide/src/www/output/townguide.xml";
-  $fh = fopen($fname,'w') or die("failed to open file ".$fname);
-  
-  fwrite($fh,"<xml>\n");
-  fwrite($fh,"<title>".$title."</title>\n");
-  fwrite($fh,"<format>".$format."</format>\n");
-  fwrite($fh,"<pagesize>".$papersize."</pagesize>\n");
+  $nowStr = gmDate("Y-m-d H:i:s");
+
+  $xmlStr="<xml>\n";
+  $xmlStr.="<title>".$title."</title>\n";
+  $xmlStr.="<format>".$format."</format>\n";
+  $xmlStr.="<pagesize>".$papersize."</pagesize>\n";
 
   if ($streetIndex=='on') {
-     fwrite($fh,"<streetIndex>True</streetIndex>\n");
+     $xmlStr.="<streetIndex>True</streetIndex>\n";
   } else {	
-     fwrite($fh,"<streetIndex>False</streetIndex>\n");
+     $xmlStr.="<streetIndex>False</streetIndex>\n";
   }
   if ($featureList=='on') {
-     fwrite($fh,"<featureList>True</featureList>\n");
+     $xmlStr.="<featureList>True</featureList>\n";
   } else {	
-     fwrite($fh,"<featureList>False</featureList>\n");
+     $xmlStr.="<featureList>False</featureList>\n";
   }
 
   $featureStr = "";
@@ -82,33 +81,49 @@
         $featureStr="None:amenity='none'";
   } 
 
-  fwrite($fh,"<features>\n".$featureStr."</features>\n");
+  $xmlStr.="<features>\n".$featureStr."</features>\n";
 
-  fwrite($fh,"<mapvfrac>75</mapvfrac>\n");
-  fwrite($fh,"<datadir>/home/graham/townguide/src</datadir>\n");
-  fwrite($fh,"<outdir>/home/graham/townguide/src/www/output</outdir>\n");
-  fwrite($fh,"<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>\n");
-  fwrite($fh,"<origin>".$lat.",".$lon."</origin>\n");
-  fwrite($fh,"<mapsize>".$nx.",".$ny."</mapsize>\n");
-  fwrite($fh,"<uname>www</uname>\n");
-  fwrite($fh,"<password>1234</password>\n");
-  fwrite($fh,"<download>True</download>\n");
-  fwrite($fh,"</xml>\n");
-  fclose($fh);
+  $xmlStr.="<mapvfrac>75</mapvfrac>\n";
+  $xmlStr.="<datadir>/home/graham/townguide/src</datadir>\n";
+  $xmlStr.="<outdir>/home/graham/townguide/src/www/output</outdir>\n";
+  $xmlStr.="<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>\n";
+  $xmlStr.="<origin>".$lat.",".$lon."</origin>\n";
+  $xmlStr.="<mapsize>".$nx.",".$ny."</mapsize>\n";
+  $xmlStr.="<uname>www</uname>\n";
+  $xmlStr.="<password>1234</password>\n";
+  $xmlStr.="<download>True</download>\n";
+  $xmlStr.="</xml>\n";
 
-  $output = null;
-
-  $cmdstr = "/home/graham/townguide/src/townguide.py ".$fname." 2>&1";
-  exec($cmdstr, $output);
-
-  print "<a href='output'>Click here to see your output</a>";
+  $xmlStrSafe = str_replace("'","\'",$xmlStr);
+  
+  #print "<pre>".$xmlStr."</pre>";
+  #print "<pre>".$xmlStrSafe."</pre>";
+  
 
 
+  $dbconn = pg_connect("host=localhost dbname=townguide user=www password=1234")
+    or die('Could not connect: ' . pg_last_error());
 
-  print "<h2>Diagnostic Output Listing </h2>";
-  print "<p>If you do not get the expected outut, the following listing should";
-  print "help work out why....</p>";
-  print "<pre>" . var_export($output,TRUE) . "</pre>\n";
 
+
+  $query  = "insert into queue (status, title, originlat, originlon,"
+  	  . "subdate, statusdate, xml) values "
+  	  . "( 0, "."'".$title."'" 
+	  . ", ".$lat.", ".$lon.", "
+	  . "timestamp '".$nowStr."', timestamp '".$nowStr."',"
+	  . " '".$xmlStrSafe."') returning jobno;";
+       
+  $result = pg_query($query) or die('Query failed: ' . pg_last_error());
+  $line = pg_fetch_array($result);
+  $jobNo=$line['jobno'];	
+   
+  print "<h1>Job Submitted</h1>";
+  print "<p>Your Job Number is ".$jobNo."</p>";
+  print "<p>Your output will appear <a href='output/".$jobNo."'>"
+  . "Here</a>.";
+
+
+
+	
 
 ?>
