@@ -117,7 +117,7 @@
   $line = pg_fetch_array($result);
   $jobNo=$line['jobno'];	
 
-  mkdir ("/home/graham/townguide/src/www/output/".$jobNo);
+  mkdir ("/home/graham/townguide/src/www/output/".$jobNo,0777);
    
   print "<h1>Job Submitted</h1>";
   print "<p>Your Job Number is ".$jobNo."</p>";
