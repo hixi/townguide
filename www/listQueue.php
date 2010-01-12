@@ -68,9 +68,12 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 echo "</table>\n";
 
+#######################################################################
+#
+#
 print "<a name='Completed'</a>";
 print "<h3>Completed Jobs</h3>";
-$query = 'SELECT jobno, statusdate from queue where status=2';
+$query = 'SELECT jobno, title,subdate,statusdate from queue where status=2';
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 
@@ -78,13 +81,17 @@ echo "<p>There are ".$resultCount." completed jobs in the queue.</p>";
 $line = pg_fetch_array($result, null, PGSQL_ASSOC);
 print "<p>".$line[0]."</p>";
 print "<p>Last Completed Job (".$line[0].") took ".$line[1]." to complete</p>";
+
 echo "<table border='1'>\n";
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
-      $resultCount = $resultCount + 1;
     echo "\t<tr>\n";
-    foreach ($line as $col_value) {
-        echo "\t\t<td>$col_value</td>\n";
-    }
+    #foreach ($line as $col_value) {
+    #    echo "\t\t<td>$col_value</td>\n";
+    #}
+    echo "\t\t<td>".$line['jobno']."</td>";
+    echo "\t\t<td>".$line['title']."</td>";
+    echo "\t\t<td>".$line['subdate']."</td>";
+    echo "\t\t<td><a href='output/".$line['jobno']."'>View Output</a></tr>";
     echo "\t</tr>\n";
 }
 echo "</table>\n";

@@ -16,7 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with townguide.  If not, see <http://www.gnu.org/licenses/>.
 #
-#    Copyright Graham Jones 2009
+#    Copyright Graham Jones 2009, 2010
 #
 import psycopg2 as psycopg
 import os
@@ -27,7 +27,9 @@ import townguide
 
 class renderQueue:
     def __init__(self,daemon):
-        self.wkdir = "."
+        self.wkdir = "/home/graham/townguide/src/www/output"
+        self.datadir = "/home/graham/townguide/src"
+        self.mapFileName = "/home/graham/mapnik_osm/osm.xml"
         self.dbname = "townguide"
         self.uname  = "graham"
 
@@ -56,7 +58,7 @@ class renderQueue:
         import os
         import sys
         UMASK=0
-        WORKDIR = "/home/graham/townguide/src/www"
+        WORKDIR = "/home/graham/townguide/src/www/output"
         MAXFD = 1024
 
         if (hasattr(os,"devnull")):
@@ -125,6 +127,7 @@ class renderQueue:
                 jobNo = records[0][0]
                 print "next job is %d." % jobNo
                 self.renderJob(jobNo)
+            self.setRunningJobsFailed()
             time.sleep(1)
 
             
@@ -143,15 +146,25 @@ class renderQueue:
         mark.execute(sqlstr)
         records = mark.fetchall()
         xmlStr = records[0][len(records[0])-1]   #xmlStr is last field
-        print "xmlStr = %s" % xmlStr
-        xmlFile = "Job_%d.xml" % jobNo
+        #print "xmlStr = %s" % xmlStr
+
+        jobDir = "%s/%d" % (self.wkdir,jobNo)
+        if not os.path.exists(jobDir):
+            os.makedirs(jobDir)
+
+        xmlFile = "%s/townguide.xml" % (jobDir)
         op = open(xmlFile,"w")
         op.write(xmlStr)
         op.close()
         pr = prefs()
         pr.loadPrefs(xmlFile)
         pl = pr.getPrefs()
-        pl['datadir'] = self.wkdir
+
+
+        pl['datadir'] = self.datadir
+        pl['outdir'] = jobDir
+        pl['mapfile'] = self.mapFileName
+
         tg = townguide.townguide(pr)
 
         #time.sleep(5)
@@ -164,6 +177,19 @@ class renderQueue:
         mark = connection.cursor()
         sqlstr = "update queue set status=%d where jobno=%d;" \
             % (status,jobNo)
+        mark.execute(sqlstr)
+        connection.commit()
+   
+    def setRunningJobsFailed(self):
+        """change the status of all jobs showing "running" status
+        to "failed" status - this is run as part of the rendering queue
+        to make sure that any jobs that crashed the render daemon are changed
+        to "failed" status
+        """
+        connection = psycopg.connect('dbname=%s' % self.dbname,\
+                                         'user=%s' % self.uname)
+        mark = connection.cursor()
+        sqlstr = "update queue set status=3 where status=1;"
         mark.execute(sqlstr)
         connection.commit()
 
@@ -246,16 +272,17 @@ class renderQueue:
         for n in range(len(xmlStr)):
             ch = xmlStr[n]
             subs = substitutions.get(ch)
-            print "ch=%s, subs=%s" % (ch,subs)
+            #print "ch=%s, subs=%s" % (ch,subs)
             if subs == None:
                 subs = ch
             xmlStrSafe = "%s%s" % (xmlStrSafe,subs)
 
         # And finally add a new record to the database to be picked up
         # by the queue daemon.
-        sqlstr = "insert into queue values "\
-            "( %d, %d, '%s', %f, %f, timestamp'%s', timestamp'%s', '%s');" \
-            % (jobNo, 
+        sqlstr = "insert into queue (status, title, originlat, originlon,"\
+            "subdate, statusdate, xml) values "\
+            "( %d, '%s', %f, %f, timestamp'%s', timestamp'%s', '%s');" \
+            % ( 
                self.NOT_STARTED,
                title,
                originLat,
@@ -267,12 +294,12 @@ class renderQueue:
         connection.commit()
 
         # Print out the entire queue - this will have to go eventually
-        sqlstr = "select * from queue;"
-        mark.execute(sqlstr)
-        records = mark.fetchall()
-        print len(records)
-        for rec in records:
-            print rec
+        #sqlstr = "select * from queue;"
+        #mark.execute(sqlstr)
+        #records = mark.fetchall()
+        #print len(records)
+        #for rec in records:
+        #    print rec
         
 
 def daemonize():
