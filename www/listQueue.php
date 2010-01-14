@@ -5,6 +5,8 @@ print "<li><a href='#Waiting'>Waiting Jobs</a></li>";
 print "<li><a href='#Running'>Running Jobs</a></li>";
 print "<li><a href='#Failed'>Failed Jobs</a></li>";
 print "<li><a href='#Completed'>Completed Jobs</a></li>";
+print "<li><a href='/index.html'>Townguide Home Page</a></li>";
+print "<li><a href='/submitForm.html'>Submit a Rendering Request Job</a></li>";
 print "</ol>";
 
 $dbconn = pg_connect("host=localhost dbname=townguide user=www password=1234")

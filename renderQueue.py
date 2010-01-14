@@ -4,7 +4,7 @@
 #    town guide identifying key amenities from OpenStreetMap data.
 #
 #    Townguide is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
+#    it under ther terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
 #
@@ -19,17 +19,39 @@
 #    Copyright Graham Jones 2009, 2010
 #
 import psycopg2 as psycopg
-import os
+import os,sys
 from datetime import datetime
 import time
 from prefs import prefs
 import townguide
 
+LOGFILE = '/var/log/renderQueue.log'
+PIDFILE = '/var/run/renderQueue.pid'
+WDIR = '/home/disk2/www/townguide'
+
+
 class renderQueue:
-    def __init__(self,daemon):
-        self.wkdir = "/home/graham/townguide/src/www/output"
-        self.datadir = "/home/graham/townguide/src"
-        self.mapFileName = "/home/graham/mapnik_osm/osm.xml"
+    def __init__(self,daemon,cFname,retry):
+        
+        if cFname==None:
+            print "using default directories"
+            self.wkdir = "/home/graham/townguide/src/www/output"
+            self.datadir = "/home/graham/townguide/src"
+            self.mapFileName = "/home/graham/mapnik_osm/osm.xml"
+        else:
+            print "reading directories from file %s." % cFname
+            ip = open(cFname,"r")
+            lines=ip.readlines()
+            # rstrip removes the trailing \n from the lines, which mess up
+            # mapnik otherwise.
+            self.datadir = lines[0].rstrip()
+            self.mapFileName = lines[1].rstrip()
+            self.wkdir = lines[2].rstrip()
+            ip.close()
+            
+
+        
+        
         self.dbname = "townguide"
         self.uname  = "graham"
 
@@ -44,8 +66,40 @@ class renderQueue:
             self.COMPLETE:'Complete',
             self.ERROR:'Error'}
 
+        if (retry):
+            self.setRetryFailedJobs()
+
 
         if (daemon):
+            # do the UNIX double-fork magic, see Stevens' "Advanced
+            # Programming in the UNIX Environment" for details (ISBN 0201563177)
+            try:
+                pid = os.fork()
+                if pid > 0:
+                    # exit first parent
+                    sys.exit(0)
+            except OSError, e:
+                print >>sys.stderr, "fork #1 failed: %d (%s)" % (e.errno, e.strerror)
+                sys.exit(1)
+
+            # decouple from parent environment
+            os.chdir("/")   #don't prevent unmounting....
+            os.setsid()
+            os.umask(0)
+
+            # do second fork
+            try:
+                pid = os.fork()
+                if pid > 0:
+                    # exit from second parent, print eventual PID before
+                    #print "Daemon PID %d" % pid
+                    open(PIDFILE,'w').write("%d"%pid)
+                    sys.exit(0)
+            except OSError, e:
+                print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
+                sys.exit(1)
+
+            # start the daemon main loop
             retcode = 0
             #retcode = self.createDaemon()
             #daemonize()
@@ -58,7 +112,6 @@ class renderQueue:
         import os
         import sys
         UMASK=0
-        WORKDIR = "/home/graham/townguide/src/www/output"
         MAXFD = 1024
 
         if (hasattr(os,"devnull")):
@@ -83,7 +136,7 @@ class renderQueue:
                 raise Exception, "%s [%d]" % (e.strerror,e.errno)
 
             if pid==0:
-                os.chdir(WORKDIR)
+                os.chdir(self.wkdir)
                 os.umask(UMASK)
             else:
                 print "exiting once - pid=%d" % pid
@@ -153,22 +206,26 @@ class renderQueue:
             os.makedirs(jobDir)
 
         xmlFile = "%s/townguide.xml" % (jobDir)
-        op = open(xmlFile,"w")
-        op.write(xmlStr)
-        op.close()
-        pr = prefs()
-        pr.loadPrefs(xmlFile)
-        pl = pr.getPrefs()
+        try:
+            op = open(xmlFile,"w")
+            op.write(xmlStr)
+            op.close()
+            pr = prefs()
+            pr.loadPrefs(xmlFile)
+            pl = pr.getPrefs()
 
+            pl['datadir'] = self.datadir
+            pl['outdir'] = jobDir
+            pl['mapfile'] = self.mapFileName
+            
+            print "mapFileName=%s." % self.mapFileName
 
-        pl['datadir'] = self.datadir
-        pl['outdir'] = jobDir
-        pl['mapfile'] = self.mapFileName
-
-        tg = townguide.townguide(pr)
-
+            tg = townguide.townguide(pr)
+            self.setJobStatus(jobNo,self.COMPLETE)
+        except:
+            print "Oh No - Error processing job number %d" % jobNo
+            self.setJobStatus(jobNo,self.FAILED)
         #time.sleep(5)
-        self.setJobStatus(jobNo,self.COMPLETE)
         
     
     def setJobStatus(self,jobNo,status):
@@ -192,6 +249,18 @@ class renderQueue:
         sqlstr = "update queue set status=3 where status=1;"
         mark.execute(sqlstr)
         connection.commit()
+
+    def setRetryFailedJobs(self):
+        """change the status of all jobs showing "failed" status
+        to "not started" status 
+        """
+        connection = psycopg.connect('dbname=%s' % self.dbname,\
+                                         'user=%s' % self.uname)
+        mark = connection.cursor()
+        sqlstr = "update queue set status=0 where status=3;"
+        mark.execute(sqlstr)
+        connection.commit()
+
 
 
     def getQueuePosition(self,jobNo):
@@ -327,25 +396,36 @@ if __name__ == "__main__":
     parser = OptionParser(usage=usage,version=version)
     parser.add_option("-d", "--daemon", action="store_true",dest="daemon",
                       help="Run as a daemon")
+    parser.add_option("-r", "--retry", action="store_true",dest="retry",
+                      help="Run as a daemon")
     parser.add_option("-i", "--init", action="store_true",dest="init",
                       help="Initialise the database")
     parser.add_option("-f", "--file", dest="fname",
                       help="Name of xml file to be queued")
     parser.add_option("-p", "--pos", dest="position",
                       help="Return the position of specified job no in queue.")
+    parser.add_option("-c", "--config", dest="cfname",
+                      help="Configuration File Name")
+    parser.add_option("--pidfile", dest="pidfile",
+                      help="not used")
+    parser.add_option("--logdir", dest="logdir",
+                      help="not used")
     parser.set_defaults(
+        retry=False,
         daemon=False,
         init=False,
-        fname="None",
-        position="-999")
+        fname=None,
+        position="-999",
+        cfname=None,
+        pidfile=None)
     (options,args)=parser.parse_args()
     
     print
     print "%s %s" % ("%prog",version)
     print
-    
 
-    rq = renderQueue(options.daemon)
+
+    rq = renderQueue(options.daemon, options.cfname, options.retry)
 
     if not options.daemon:
         if (options.fname != 'None'):

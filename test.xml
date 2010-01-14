@@ -9,8 +9,8 @@
 <streetIndex>True</streetIndex>
 <outdir>.</outdir>
 <download>true</download>
-<datadir>/home/graham/townguide/src</datadir>
-<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>
+<datadir>/home/disk2/www/townguide</datadir>
+<mapfile>/home/disk2/OSM/mapnik_osm/osm.xml</mapfile>
 <detailsize>5</detailsize>
 <tilesize>1000</tilesize>
 <oscale>10</oscale>

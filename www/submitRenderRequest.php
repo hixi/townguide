@@ -117,12 +117,14 @@
   $line = pg_fetch_array($result);
   $jobNo=$line['jobno'];	
 
-  mkdir ("/home/graham/townguide/src/www/output/".$jobNo,0777);
+  mkdir ("/home/disk2/www/townguide/www/output/".$jobNo,0777);
+  chmod ("/home/disk2/www/townguide/www/output/".$jobNo,0777);
    
   print "<h1>Job Submitted</h1>";
   print "<p>Your Job Number is ".$jobNo."</p>";
   print "<p>Your output will appear <a href='output/".$jobNo."'>"
   . "Here</a>.";
+  print "<p><a href='listQueue.php'>List Job Rendering Queue</a></p>";
 
 
 

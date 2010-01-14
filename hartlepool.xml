@@ -4,7 +4,7 @@
 <pagesize>A4</pagesize>
 <mapvfrac>75</mapvfrac>
 <columnWidth>4.0</columnWidth>
-<download>True</download>
+<download>true</download>
 <streetIndex>False</streetIndex>
 <outdir>hartlepool</outdir>
 <datadir>/home/graham/townguide</datadir>
