@@ -81,9 +81,6 @@ $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 
 echo "<p>There are ".$resultCount." completed jobs in the queue.</p>";
-$line = pg_fetch_array($result, null, PGSQL_ASSOC);
-print "<p>".$line[0]."</p>";
-print "<p>Last Completed Job (".$line[0].") took ".$line[1]." to complete</p>";
 
 echo "<table border='1'>\n";
 while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
@@ -99,6 +96,9 @@ while ($line = pg_fetch_array($result, null, PGSQL_ASSOC)) {
 }
 echo "</table>\n";
 
+#$line = pg_fetch_array($result, null, PGSQL_ASSOC);
+#print "<p>".$line[0]."</p>";
+#print "<p>Last Completed Job (".$line[0].") took ".$line[1]." to complete</p>";
 
 
 

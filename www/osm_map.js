@@ -31,6 +31,7 @@ var map = null;
 var update_lock = 0;
 var epsg_display_projection = new OpenLayers.Projection('EPSG:4326');
 var epsg_projection = new OpenLayers.Projection('EPSG:900913');
+var vecLayer = null
 
 function getOriginLon() { return document.getElementById('lon'); }
 function getOriginLat() { return document.getElementById('lat'); }
@@ -53,6 +54,7 @@ function updateForm()
 
     getOriginLat().value = bottomright.lat.toFixed(4);
     getOriginLon().value = topleft.lon.toFixed(4);
+    updateMap();  /* To update the shaded select area */
 }
 
 /* Update the map on form field modification. */
@@ -61,18 +63,59 @@ function updateMap()
     /*alert("updateMap()")*/
     var origin = new OpenLayers.LonLat(getOriginLon().value,
 				       getOriginLat().value);
-    var bounds = new OpenLayers.Bounds(getOriginLon().value,
-                                       getOriginLat().value+0.1,
-                                       getOriginLon().value+0.1,
-                                       getOriginLat().value);
-    bounds.transform(epsg_display_projection, epsg_projection);
-
-    update_lock = 1;
+    /*alert("origin.lat="+origin.lat+" origin.lon="+origin.lon);*/
     origin.transform(epsg_display_projection, epsg_projection);
-    map.setCenter(origin,12);
+    var nx = getNx().value;
+    var ny = getNy().value;
+    /*alert("nx="+nx+" ny="+ny);*/
+    var bounds = new OpenLayers.Bounds(origin.lon,
+				       origin.lat,
+				       origin.lon+1000*nx,
+				       origin.lat+1000*ny);
+    update_lock = 1;
+    /*map.setCenter(origin,12);*/
+    /*map.zoomToExtent(bounds);*/
     update_lock = 0;
+
+    var pointList = [];
+    var newPoint = new OpenLayers.Geometry.Point(origin.lon,origin.lat);
+    pointList.push(newPoint);
+    var newPoint = 
+	new OpenLayers.Geometry.Point(origin.lon,
+				      origin.lat+1000*ny);
+    pointList.push(newPoint);
+    var newPoint = 
+	new OpenLayers.Geometry.Point(origin.lon+1000*nx,
+				      origin.lat+1000*ny);
+    pointList.push(newPoint);
+    var newPoint = 
+	new OpenLayers.Geometry.Point(origin.lon+1000*nx,
+				      origin.lat);
+    pointList.push(newPoint);
+    pointList.push(pointList[0]);
+
+    var linearRing = new OpenLayers.Geometry.LinearRing(pointList);
+    var polyFeature = 
+	new OpenLayers.Feature.Vector(
+				      new OpenLayers.Geometry.Polygon([linearRing]));
+    vecLayer.destroyFeatures();
+    vecLayer.addFeatures([polyFeature]);
 }
 
+function zoomMap() 
+{
+    var origin = new OpenLayers.LonLat(getOriginLon().value,
+				       getOriginLat().value);
+    origin.transform(epsg_display_projection, epsg_projection);
+    var nx = getNx().value;
+    var ny = getNy().value;
+    var bounds = new OpenLayers.Bounds(origin.lon,
+				       origin.lat,
+				       origin.lon+1000*nx,
+				       origin.lat+1000*ny);
+    map.zoomToExtent(bounds);
+
+}
 /* Main initialisation function. Must be called before the map is manipulated. */
 function init()
 {
@@ -91,14 +134,12 @@ function init()
     layerTilesMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
     map.addLayer(layerTilesMapnik);
 
-    layerSelectBounds = new OpenLayers.Layer.Vector("SelectArea");
-    map.addLayer(layerSelectBounds);
+    vecLayer = new OpenLayers.Layer.Vector("SelectArea");
+    map.addLayer(vecLayer);
 
-    areaRect = new OpenLayers.Geometry.Rectangle();
-    areaFeature = new OpenLayers.Feature.Vector(areaRect);
-
-    map.events.register('zoomend', map, updateForm);
+    /*map.events.register('zoomend', map, updateForm);*/
     map.events.register('moveend', map, updateForm);
     updateMap();
+    zoomMap();
 }
 

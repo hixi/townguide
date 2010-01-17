@@ -72,7 +72,7 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 	    <td>  Title:</td>
 	    <td colspan="3"> <INPUT type="text" name="title" value="Enter Title for your Town Guide" size="30" maxlength="50"><br/></td>
 	  <tr>
-	    <td>Origin (lat,lon)</td>
+	    <td>Origin (lat,lon)<input type="button" value="Update from Map" onClick=updateForm()></td>
 	    <td><INPUT type="text" id="lat" 
 		       name="lat" value="54.6466" size="10" 
 		       maxlength="10"
@@ -89,12 +89,12 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 		       name="nx" id="nx" 
 		       value="3" size="4" 
 		       maxlength="4"
-		       onChange="updateMap()"></td>
+		       onChange="zoomMap()"></td>
 	    <td><INPUT type="text" 
 		       name="ny" id="ny"
 		       value="3" size="4" 
 		       maxlength="4"
-		       onChange="updateMap()"><br>
+		       onChange="zoomMap()"><br>
             </td>
 	  </tr>
 	  <tr>
