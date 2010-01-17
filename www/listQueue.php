@@ -1,3 +1,4 @@
+<?php include("header.php");?>
 <?php
 print "<h1>TownGuide Queue Status</h1>";
 print "<ol>";
@@ -15,7 +16,7 @@ $dbconn = pg_connect("host=localhost dbname=townguide user=www password=1234")
 print "<a name='Waiting'</a>";
 print "<h3>Waiting Jobs </h3>";
 
-$query = 'SELECT jobno,status,title FROM queue where status=0';
+$query = 'SELECT jobno,status,title FROM queue where status=0 order by jobno desc';
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 echo "<p>There are ".$resultCount." waiting jobs in the queue.</p>";
@@ -34,7 +35,7 @@ echo "</table>\n";
 
 print "<a name='Running'</a>";
 print "<h3>Running Job</h3>";
-$query = 'SELECT jobno,status,title FROM queue where status=1';
+$query = 'SELECT jobno,status,title FROM queue where status=1 order by jobno desc';
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 echo "<p>There are ".$resultCount." running jobs in the queue.</p>";
@@ -53,7 +54,7 @@ echo "</table>\n";
 
 print "<a name='Failed'</a>";
 print "<h3>Failed Jobs</h3>";
-$query = 'SELECT jobno,status,title FROM queue where status=3';
+$query = 'SELECT jobno,status,title FROM queue where status=3 order by jobno desc';
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 echo "<p>There are ".$resultCount." failed jobs in the queue.</p>";
@@ -75,7 +76,7 @@ echo "</table>\n";
 #
 print "<a name='Completed'</a>";
 print "<h3>Completed Jobs</h3>";
-$query = 'SELECT jobno, title,subdate,statusdate from queue where status=2';
+$query = 'SELECT jobno, title,subdate,statusdate from queue where status=2 order by jobno desc';
 $result = pg_query($query) or die('Query failed: ' . pg_last_error());
 $resultCount = pg_num_rows($result);
 

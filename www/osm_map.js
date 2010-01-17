@@ -32,12 +32,10 @@ var update_lock = 0;
 var epsg_display_projection = new OpenLayers.Projection('EPSG:4326');
 var epsg_projection = new OpenLayers.Projection('EPSG:900913');
 
-function getUpperLeftLat() { return document.getElementById('lat_upper_left'); }
-function getUpperLeftLon() { return document.getElementById('lon_upper_left'); }
-function getBottomRightLat() { return document.getElementById('lat_bottom_right'); }
-function getBottomRightLon() { return document.getElementById('lon_bottom_right'); }
 function getOriginLon() { return document.getElementById('lon'); }
 function getOriginLat() { return document.getElementById('lat'); }
+function getNx() { return document.getElementById('nx'); }
+function getNy() { return document.getElementById('ny'); }
 
 /** Map Zoom/Move events callback: update form fields on zoom action. */
 function updateForm()
@@ -53,10 +51,6 @@ function updateForm()
     var bottomright = new OpenLayers.LonLat(bounds.right, bounds.bottom);
     bottomright = bottomright.transform(epsg_projection, epsg_display_projection);
 
-    getUpperLeftLat().value = topleft.lat.toFixed(4);
-    getUpperLeftLon().value = topleft.lon.toFixed(4);
-    getBottomRightLat().value = bottomright.lat.toFixed(4);
-    getBottomRightLon().value = bottomright.lon.toFixed(4);
     getOriginLat().value = bottomright.lat.toFixed(4);
     getOriginLon().value = topleft.lon.toFixed(4);
 }
@@ -65,14 +59,17 @@ function updateForm()
 function updateMap()
 {
     /*alert("updateMap()")*/
-    var bounds = new OpenLayers.Bounds(getUpperLeftLon().value,
-                                       getUpperLeftLat().value,
-                                       getBottomRightLon().value,
-                                       getBottomRightLat().value);
+    var origin = new OpenLayers.LonLat(getOriginLon().value,
+				       getOriginLat().value);
+    var bounds = new OpenLayers.Bounds(getOriginLon().value,
+                                       getOriginLat().value+0.1,
+                                       getOriginLon().value+0.1,
+                                       getOriginLat().value);
     bounds.transform(epsg_display_projection, epsg_projection);
 
     update_lock = 1;
-    map.zoomToExtent(bounds);
+    origin.transform(epsg_display_projection, epsg_projection);
+    map.setCenter(origin,12);
     update_lock = 0;
 }
 
@@ -93,6 +90,12 @@ function init()
 
     layerTilesMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
     map.addLayer(layerTilesMapnik);
+
+    layerSelectBounds = new OpenLayers.Layer.Vector("SelectArea");
+    map.addLayer(layerSelectBounds);
+
+    areaRect = new OpenLayers.Geometry.Rectangle();
+    areaFeature = new OpenLayers.Feature.Vector(areaRect);
 
     map.events.register('zoomend', map, updateForm);
     map.events.register('moveend', map, updateForm);

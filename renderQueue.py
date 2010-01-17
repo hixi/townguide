@@ -25,13 +25,11 @@ import time
 from prefs import prefs
 import townguide
 
-LOGFILE = '/var/log/renderQueue.log'
-PIDFILE = '/var/run/renderQueue.pid'
 WDIR = '/home/disk2/www/townguide'
 
 
 class renderQueue:
-    def __init__(self,daemon,cFname,retry):
+    def __init__(self,daemon,cFname,retry,pidfile):
         
         if cFname==None:
             print "using default directories"
@@ -93,7 +91,7 @@ class renderQueue:
                 if pid > 0:
                     # exit from second parent, print eventual PID before
                     #print "Daemon PID %d" % pid
-                    open(PIDFILE,'w').write("%d"%pid)
+                    open(pidfile,'w').write("%d"%pid)
                     sys.exit(0)
             except OSError, e:
                 print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
@@ -175,7 +173,8 @@ class renderQueue:
             mark.execute(sqlstr)
             records = mark.fetchall()
             if len(records) == 0:
-                print "No Jobs Waiting"
+                #print "No Jobs Waiting"
+                pass
             else:
                 jobNo = records[0][0]
                 print "next job is %d." % jobNo
@@ -220,11 +219,24 @@ class renderQueue:
             
             print "mapFileName=%s." % self.mapFileName
 
+            #            try:
+            #jobLog = open("%s/townguide.log" % (jobDir))
+            #queueLog = sys.stdout
+
+            #sys.stdout = jobLog
+            #sys.stderr = jobLog
+
+
             tg = townguide.townguide(pr)
             self.setJobStatus(jobNo,self.COMPLETE)
+            #sys.stdout = queueLog
+            #sys.stderr = queueLog
+            #except:
+            #    print "Oh No - error opening log file, or townguide failed"
+            #    self.setJobStatus(jobNo,self.ERROR)
         except:
             print "Oh No - Error processing job number %d" % jobNo
-            self.setJobStatus(jobNo,self.FAILED)
+            self.setJobStatus(jobNo,self.ERROR)
         #time.sleep(5)
         
     
@@ -417,15 +429,28 @@ if __name__ == "__main__":
         fname=None,
         position="-999",
         cfname=None,
-        pidfile=None)
+        pidfile=None,
+        logdir=None)
     (options,args)=parser.parse_args()
     
     print
     print "%s %s" % ("%prog",version)
     print
 
+    if not options.logdir == None:
+        print "redirecting output to %s/renderQueue.log" % options.logdir
+        logf = open("%s/renderQueue.log" % options.logdir,"w")
+        sys.stdout = logf
+        sys.stderr = logf
+    else:
+        print "Using standard input and output streams"
 
-    rq = renderQueue(options.daemon, options.cfname, options.retry)
+    print
+
+
+        
+
+    rq = renderQueue(options.daemon, options.cfname, options.retry, options.pidfile)
 
     if not options.daemon:
         if (options.fname != 'None'):

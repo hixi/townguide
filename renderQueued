@@ -12,12 +12,12 @@ set -e
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="renderQueue townguide job queue manager"
-NAME=renderQueue.py
+NAME=renderQueue
 DAEMON=/home/disk2/www/townguide/$NAME
-PIDFILE=/var/run/$NAME.pid
+PIDFILE=/home/disk2/www/townguide/www/output/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 USER=www
-LOGDIR=/var/log/$NAME/
+LOGDIR=/home/disk2/www/townguide/www/output
 
 # Read config file if it is present.
 if [ -r /etc/default/$NAME ]
@@ -29,32 +29,26 @@ fi
 #	Function that starts the daemon/service.
 #
 d_start() {
-	start-stop-daemon --start --quiet \
+	start-stop-daemon --start \
                 --chuid $USER \
-                --pidfile $PIDFILE \
 		--exec $DAEMON \
                 -- \
-                --pidfile $PIDFILE \
                 --daemon \
-                --logdir $LOGDIR 
-	
+                --logdir $LOGDIR \
+	        --config /home/disk2/www/townguide/townguide.cfg \
+	        -r
 }
 #	Function that stops the daemon/service.
 #
 d_stop() {
-
-	## This is a bug in the start-stop-daemon that checks the PID name from the /proc/PID/stat filesystem...
-	## Unfortunately this cuts-off the name of the daemon because its longer now, and then it doesnt get 
-	## caught by the start-stop-daemon. The daemon actually reports it as squeezecenter_s instead of 
-	## squeezecenter_safe.
-	start-stop-daemon -o --stop --pidfile $PIDFILE --name renderQueue
+	start-stop-daemon -o --stop --name renderQueue
 }
 
 #
 #	Function that sends a SIGHUP to the daemon/service.
 #
 d_reload() {
-	start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+	start-stop-daemon --stop --quiet \
 		--name $NAME --signal 1
 }
 

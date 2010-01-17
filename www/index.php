@@ -20,7 +20,9 @@ var pageTracker = _gat._getTracker("UA-7615786-8");
 pageTracker._trackPageview();
 } catch(err) {}</script>
 
-</head><body>
+</head>
+<body>
+<?php include("header.php");?>
 <h1>Free Town Guide Generator</h1>
 <h2>Introduction</h2>
 The Free Town Guide Generator will generate simple PDF posters which
@@ -54,7 +56,7 @@ Examples of the town guide generator output can be seen by clicking on the follo
 <p>To generate a town guide you need to know the latitude and longitude of
 the bottom left corner of the area you are interested in. You also
 specify the size of the area to be mapped in 1km units.</p>
-<p>You can try the generator <a href="submitForm.html" name="here">here</a>.
+<p>You can try the generator <a href="submitForm.php" name="here">here</a>.
 Reliability is not promised at the moment though - this is very much work in
 progress!</p>
 
