@@ -49,6 +49,24 @@ var pageTracker = _gat._getTracker("UA-7615786-8");
 pageTracker._trackPageview();
 } catch(err) {}</script>
 
+
+<script>
+  function increment(id) {
+     var val = parseInt(document.getElementById(id).value);
+     if (val<=20) {
+		  document.getElementById(id).value = val+1;
+		  updateMap();
+		  }
+  }
+  function decrement(id) {
+     var val = parseInt(document.getElementById(id).value);
+     if (val>1) {
+                 document.getElementById(id).value = val-1;
+                 updateMap();
+                }
+  }
+</script>
+
 </head>
 
 <body onload='pageinit()'>
@@ -72,7 +90,7 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 	    <td>  Title:</td>
 	    <td colspan="3"> <INPUT type="text" name="title" value="Enter Title for your Town Guide" size="30" maxlength="50"><br/></td>
 	  <tr>
-	    <td>Origin (lat,lon)<input type="button" value="Update from Map" onClick=updateForm()></td>
+	    <td>Origin (lat,lon)</td>
 	    <td><INPUT type="text" id="lat" 
 		       name="lat" value="54.6466" size="10" 
 		       maxlength="10"
@@ -85,17 +103,36 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 	  </tr>
 	  <tr>
 	    <td>Map size (x,y in 1km units)</td>
-	    <td><INPUT type="text" 
-		       name="nx" id="nx" 
-		       value="3" size="4" 
-		       maxlength="4"
-		       onChange="zoomMap()"></td>
-	    <td><INPUT type="text" 
-		       name="ny" id="ny"
-		       value="3" size="4" 
-		       maxlength="4"
-		       onChange="zoomMap()"><br>
-            </td>
+	    <td>
+	      <table>
+		<tr>
+		  <td rowspan='2'>
+		    <INPUT type="text" 
+			   name="nx" id="nx" 
+			   value="3" size="2" 
+			   maxlength="2"
+			   onChange="zoomMap()">
+		    </td>
+		  <td><img src="plus.png" onClick="increment('nx')"></td>
+		  </tr>
+		<tr><td><img src="minus.png" onClick="decrement('nx')"></td></tr>
+	      </table>
+	    </td>
+	    <td>
+	      <table>
+		<tr>
+		  <td rowspan='2'>
+		    <INPUT type="text" 
+			   name="ny" id="ny" 
+			   value="3" size="2" 
+			   maxlength="2"
+			   onChange="zoomMap()">
+		    </td>
+		  <td><img src="plus.png" onClick="increment('ny')"></td>
+		  </tr>
+		<tr><td><img src="minus.png" onClick="decrement('ny')"></td></tr>
+	      </table>
+	    </td>
 	  </tr>
 	  <tr>
 	    <td>Output Format</td>
