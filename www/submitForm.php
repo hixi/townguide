@@ -102,7 +102,8 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 		       onChange="updateMap()"></td>
 	  </tr>
 	  <tr>
-	    <td>Map size (x,y in 1km units)</td>
+	    <td>Map size (x,y in 1km units)
+	      <input type='button' value='Re-Zoom Map' onClick='zoomMap()'></td>
 	    <td>
 	      <table>
 		<tr>

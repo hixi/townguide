@@ -107,8 +107,8 @@ function zoomMap()
     var origin = new OpenLayers.LonLat(getOriginLon().value,
 				       getOriginLat().value);
     origin.transform(epsg_display_projection, epsg_projection);
-    var nx = getNx().value;
-    var ny = getNy().value;
+    var nx = parseInt(getNx().value);
+    var ny = parseInt(getNy().value);
     var bounds = new OpenLayers.Bounds(origin.lon,
 				       origin.lat,
 				       origin.lon+1000*nx,
