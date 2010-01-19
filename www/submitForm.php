@@ -32,8 +32,17 @@ function poiClick()
        document.getElementById(featureCheckBoxes[i]).disabled=disabled
 
      }
+}
 
 
+function toggleAdvancedOptions() {
+   if (document.getElementById("advanced").checked) {
+      document.getElementById("advancedOptions").style.display='block';
+   }
+   else {
+      document.getElementById("advancedOptions").style.display='none';
+
+   }
 }
 
 </script>
@@ -188,6 +197,13 @@ bottom left corner of your townguide map.  Adjust the map size in units of
       <td>Banking</td>
       <td><INPUT type="checkbox"  id="banking" name="banking"></td>
     </tr>
+  </table>
+  <table><tr>
+      <td>Show Advanced Options</td>
+      <td><INPUT type="checkbox" checked id="advanced" name="" onClick = "toggleAdvancedOptions()"></td>
+  </tr></table>
+  <table id="advancedOptions">
+    <tr><td>oscale</td><td><input type="text" id="oscale" value="1000"></td></tr>
   </table>
   <table>
     <tr><td colspan="4"><INPUT type="submit" value="Submit Request"></td></tr>

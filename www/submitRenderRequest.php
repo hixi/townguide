@@ -16,6 +16,7 @@
   $leisure     = $_REQUEST['leisure'] ;
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
+  $oscale      = $_REQUEST['oscale'];
 
   $nowStr = gmDate("Y-m-d H:i:s");
 
