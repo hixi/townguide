@@ -282,11 +282,6 @@ class townguide:
         29sep2009  GJ  ORIGINAL VERSION, based on generate_image.py
         06jan2010  GJ  Renamed to drawTile_bbox from drawTile
         """
-        #try:
-        #    mapfile = mapnik.os.environ['MAPNIK_MAP_FILE']
-        #except KeyError:
-        #    mapfile = "osm.xml"
-        #mapfile = "osm.xml"
         mapfile = str(self.pl['mapfile'])
         map_uri = str(fname)
         print ("mapfile=%s" % mapfile)
@@ -311,15 +306,14 @@ class townguide:
         fname = "%s/overview.png" % outdir
 
         if self.debug: print "Drawing Overview Map - fname=",fname
-        scale = self.oscale # metres per pixel
         c0 = self.c0
         bbox = mapnik.Envelope(c0.x,\
                                c0.y,\
                                c0.x+self.slen*self.nx,\
                                c0.y+self.slen*self.ny)
         self.drawTile_bbox(bbox,
-                      int(self.slen*self.nx/scale),
-                      int(self.slen*self.ny/scale),
+                      int(self.slen*self.nx/self.pl['oscale']),
+                      int(self.slen*self.ny/self.pl['oscale']),
                       fname)
 
         # Now add the grid and labels

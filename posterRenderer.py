@@ -247,7 +247,11 @@ class posterRenderer():
         ###############################################################
         # Render the map, and add it to the page
 
-        self.tg.oscale =  1000. *  self.tg.nx / self.mapX / 2
+        #self.tg.pl['oscale'] =  1000. *  self.tg.nx / self.mapX / 2
+        dpi = 1200 # required image resolution
+        pixels = self.mapX * 72 * dpi  # number of pixels in image at required resolution
+        #oscale is metres per pixel
+        self.tg.pl['oscale'] =  self.tg.pl['slen'] * self.tg.pl['nx'] / pixels
         self.tg.drawOverviewMap(self.tg.outdir,addFeatures=True)
 
         im = Image("%s/%s" % (self.tg.outdir,"overview.png"),

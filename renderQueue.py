@@ -91,7 +91,9 @@ class renderQueue:
                 if pid > 0:
                     # exit from second parent, print eventual PID before
                     #print "Daemon PID %d" % pid
-                    open(pidfile,'w').write("%d"%pid)
+                    of = open(pidfile,'w')
+                    of.write("%d"%pid)
+                    of.close()
                     sys.exit(0)
             except OSError, e:
                 print >>sys.stderr, "fork #2 failed: %d (%s)" % (e.errno, e.strerror)
