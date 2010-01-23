@@ -8,7 +8,6 @@
 <streetIndex>False</streetIndex>
 <outdir>hartlepool</outdir>
 <datadir>/home/graham/townguide</datadir>
-<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>
 <debug>False</debug>
 <origin>54.6466,-1.2619</origin>
 <mapsize>10,16</mapsize>

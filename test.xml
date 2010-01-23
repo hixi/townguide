@@ -1,6 +1,7 @@
 <xml>
 <title>Hartlepool Street Map</title>
 <origin>54.6466,-1.2619</origin>
+<dpi>300</dpi>
 <mapsize>3,3</mapsize>
 <format>poster</format>
 <pagesize>A4</pagesize>

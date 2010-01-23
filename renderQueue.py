@@ -444,6 +444,7 @@ if __name__ == "__main__":
         logf = open("%s/renderQueue.log" % options.logdir,"w")
         sys.stdout = logf
         sys.stderr = logf
+        #sys.stderr = open("%s/renderQueue.err" % options.logdir,"w")
     else:
         print "Using standard input and output streams"
 

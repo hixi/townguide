@@ -58,6 +58,7 @@ class posterRenderer():
         defPrefs = {
             'pagesize': 'A4',
             'mapvfrac': '80',
+            'dpi':'100',
             'bottomMargin': '30',
             'topMargin': '72',
             'leftMargin': '10',
@@ -166,7 +167,7 @@ class posterRenderer():
                         - mapframe.leftPadding \
                         - mapframe.rightPadding
             self.mapY = self.mapX * self.tg.ny/self.tg.nx
-        print "mapsize = %f, %f" % (self.mapX, self.mapY)
+        print "mapsize = %f, %f points" % (self.mapX, self.mapY)
 
         # how much space is there next to the map - can we fit some columns
         # in there?
@@ -248,10 +249,12 @@ class posterRenderer():
         # Render the map, and add it to the page
 
         #self.tg.pl['oscale'] =  1000. *  self.tg.nx / self.mapX / 2
-        dpi = 1200 # required image resolution
-        pixels = self.mapX * 72 * dpi  # number of pixels in image at required resolution
+        #dpi = 300 # required image resolution
+        dpi = float(self.tg.pl['dpi'])
+        pixels = self.mapX * dpi / 72.  # number of pixels in image at required resolution
         #oscale is metres per pixel
-        self.tg.pl['oscale'] =  self.tg.pl['slen'] * self.tg.pl['nx'] / pixels
+        self.tg.pl['oscale'] =  self.tg.pl['tilesize'] * self.tg.pl['nx'] / pixels
+        print "pixels = %f" % pixels
         self.tg.drawOverviewMap(self.tg.outdir,addFeatures=True)
 
         im = Image("%s/%s" % (self.tg.outdir,"overview.png"),

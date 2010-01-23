@@ -8,6 +8,7 @@
  * Copyright (C) 2009 Thomas Petazzoni
  * Copyright (C) 2009 Gaël Utard
  * Copyright (C) 2009 Étienne Loks
+ * Copyright (C) 2009 Graham Jones - converted for townguide.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -60,14 +61,11 @@ function updateForm()
 /* Update the map on form field modification. */
 function updateMap()
 {
-    /*alert("updateMap()")*/
     var origin = new OpenLayers.LonLat(getOriginLon().value,
 				       getOriginLat().value);
-    /*alert("origin.lat="+origin.lat+" origin.lon="+origin.lon);*/
     origin.transform(epsg_display_projection, epsg_projection);
     var nx = getNx().value;
     var ny = getNy().value;
-    /*alert("nx="+nx+" ny="+ny);*/
     var bounds = new OpenLayers.Bounds(origin.lon,
 				       origin.lat,
 				       origin.lon+1000*nx,

@@ -16,7 +16,8 @@
   $leisure     = $_REQUEST['leisure'] ;
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
-  $oscale      = $_REQUEST['oscale'];
+  $dpi         = $_REQUEST['dpi'];
+  $markersize  = $_REQUEST['markersize'];
 
   $nowStr = gmDate("Y-m-d H:i:s");
 
@@ -75,7 +76,7 @@
   if ($banking=='on') {
     if ($featureStr!="")
         $featureStr=$featureStr.',';
-    $featureStr = $featureStr."Leisure:amenity='bank'|'atm'"; 
+    $featureStr = $featureStr."Banking:amenity='bank'|'atm'"; 
   } 
 
   if ($featureStr=="") {
@@ -85,11 +86,13 @@
   $xmlStr.="<features>\n".$featureStr."</features>\n";
 
   $xmlStr.="<mapvfrac>75</mapvfrac>\n";
-  $xmlStr.="<datadir>/home/graham/townguide/src</datadir>\n";
-  $xmlStr.="<outdir>/home/graham/townguide/src/www/output</outdir>\n";
-  $xmlStr.="<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>\n";
+  #$xmlStr.="<datadir>/home/graham/townguide/src</datadir>\n";
+  #$xmlStr.="<outdir>/home/graham/townguide/src/www/output</outdir>\n";
+  #$xmlStr.="<mapfile>/home/graham/mapnik_osm/osm.xml</mapfile>\n";
   $xmlStr.="<origin>".$lat.",".$lon."</origin>\n";
   $xmlStr.="<mapsize>".$nx.",".$ny."</mapsize>\n";
+  $xmlStr.="<dpi>".$dpi."</dpi>\n";
+  $xmlStr.="<markersize>".$markersize."</markersize>\n";
   $xmlStr.="<uname>www</uname>\n";
   $xmlStr.="<password>1234</password>\n";
   $xmlStr.="<download>True</download>\n";

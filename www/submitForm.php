@@ -11,6 +11,9 @@
 <script>
 function pageinit()
 {
+    advCheckBox = document.getElementById("advanced");
+    advCheckBox.checked = false;
+    toggleAdvancedOptions();
     init();
 }
 
@@ -101,18 +104,18 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 	  <tr>
 	    <td>Origin (lat,lon)</td>
 	    <td><INPUT type="text" id="lat" 
-		       name="lat" value="54.6466" size="10" 
+		       name="lat" value="54.6779" size="10" 
 		       maxlength="10"
 		       onChange="updateMap()"></td>
 	    <td><INPUT type="text" 
 		       id="lon" name="lon" 
-		       value="-1.2619" size="10" 
+		       value="-1.2204" size="10" 
 		       maxlength="10"
 		       onChange="updateMap()"></td>
 	  </tr>
 	  <tr>
 	    <td>Map size (x,y in 1km units)
-	      <input type='button' value='Re-Zoom Map' onClick='zoomMap()'></td>
+	      </td>
 	    <td>
 	      <table>
 		<tr>
@@ -203,7 +206,8 @@ bottom left corner of your townguide map.  Adjust the map size in units of
       <td><INPUT type="checkbox" checked id="advanced" name="" onClick = "toggleAdvancedOptions()"></td>
   </tr></table>
   <table id="advancedOptions">
-    <tr><td>oscale</td><td><input type="text" id="oscale" value="1000"></td></tr>
+    <tr><td>dpi</td><td><input type="text" name="dpi" value="100"></td></tr>
+    <tr><td>Marker Size (pt)</td><td><input type="text" name="markersize" value="10"></td></tr>
   </table>
   <table>
     <tr><td colspan="4"><INPUT type="submit" value="Submit Request"></td></tr>

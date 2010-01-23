@@ -25,13 +25,16 @@ pageTracker._trackPageview();
 <?php include("header.php");?>
 <h1>Free Town Guide Generator</h1>
 <h2>Introduction</h2>
-The Free Town Guide Generator will generate simple PDF posters which
-are guides to a particular area. The poster contains a map, and a
+<p>The Free Town Guide Generator will generate simple PDF posters which
+are guides to a particular area. </p>
+<p>The poster contains a map, and a
 selectable set of features (a street index, or lists of pubs,
-restaurants, shops, banks etc.).
-The Data is derived from the <a href="http://www.openstreetmap.org/" name="OpenStreetMap"></a> project, which is a freely available map dataset, that can be edited by anyone.
-
-Examples of the town guide generator output can be seen by clicking on the following images:
+restaurants, shops, banks etc.).  The idea is that it will help you to produce
+useable printed maps, with a street index and selectable points of interest
+highlighted.</p>
+<p>The Data is derived from the <a href="http://www.openstreetmap.org/" name="OpenStreetMap"></a> project, which is a freely available map dataset, that can be edited by anyone.
+</p>
+<p>Examples of the town guide generator output can be seen by clicking on the following images:</p>
 <table align="center">
 <tbody><tr>
   <td><a href="example1_hartlepool.pdf">Hartlepool Pub Guide</a></td>
@@ -52,27 +55,44 @@ Examples of the town guide generator output can be seen by clicking on the follo
 </tbody></table>
 
 <h2>Generate a Town Guide</h2>
+<p>There are two ways to generate a town guide using this program.  
+You can either download the source code and install it on your computer from 
+<a href="http://www.code.google.com/p/townguide">
+http://www.code.google.com/p/townguide</a>, 
+or you can use the web service on this site to generate one for you which 
+you can download.</p>
 <h3>Request Generation of a Town Guide</h3>
-<p>To generate a town guide you need to know the latitude and longitude of
-the bottom left corner of the area you are interested in. You also
-specify the size of the area to be mapped in 1km units.</p>
-<p>You can try the generator <a href="submitForm.php" name="here">here</a>.
-Reliability is not promised at the moment though - this is very much work in
+<p>You can generate a town guide using this web service by clicking on the link
+below then selecting the area that you want to produce the map for.  This is done by dragging the map image to put your area within the shaded region (which is the are that will be mapped).   The size of the map to be produced is selectable using the controls on the page.</p>
+<p>Note that the service is running on a very slow computer, so when you ask
+it to generate a map for you by pressing the "submit" button it will add your
+request to a queue of jobs.  You can check the progress of your request in the
+job queue using the link below.</p>
+<table border='1' bgcolor="#ff0000">
+<tr><td><a href="submitForm.php" name="here">Generate a Town Guide</a></td></tr>
+</table>
+<p>Reliability of this service is not promised at the moment though 
+- this is very much work in
 progress!</p>
 
 <h3>View Job Queue</h3>
-You can view the job request queue <a href="listQueue.php">here</a>.
+<p>You can view the job request queue usng the link below</p>
+<table border='1' bgcolor="#ff0000">
+<tr><td> <a href="listQueue.php">View Rendering Job Queue</a>.</p></td></tr>
+</table>
 
 
 <h3>Source Code</h3>
-The source code for the townguide generator is at <a href="http://code.google.com/p/townguide">http://code.google.com/p/townguide</a>.
-
+<p>The source code for the townguide generator is at <a href="http://code.google.com/p/townguide">http://code.google.com/p/townguide</a>.
+</p>
 <h2>Contact</h2>
-If you have any comments on the program or its output, please email me
+<p>If you have any comments on the program or its output, please email me
 on grahamjones139 at googlemail.com and/or raise an issue on the
-project web page at <a href="http://code.google.com/p/townguide/issues">http://code.google.com/p/townguide/issues</a>. 
+project web page at <a href="http://code.google.com/p/townguide/issues">http://code.google.com/p/townguide/issues</a>. </p>
 
 <h2>Alternatives</h2>
+<p>
 <a href="http://www.maposmatic.org/">www.maposmatic.org</a> provide a similar
 service, producing printable maps with street indices (indexes?).
+</p
 </body></html>

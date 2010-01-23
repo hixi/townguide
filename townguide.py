@@ -129,6 +129,7 @@ class townguide:
             'mapzize': '3,3',
             'tilesize': '1000',
             'oscale': '10',
+            'markersize':'12',
             'datadir': '/home/disk2/graham/ntmisc/townguide',
             'mapfile': '/home/disk2/graham/ntmisc/townguide/osm.xml',
             'uname': 'graham',
@@ -161,7 +162,10 @@ class townguide:
         (nx,ny)   = self.pl['mapsize'].split(',')
         nx = int(nx)
         ny = int(ny)
-        slen      = float(self.pl['tilesize'])
+        self.pl['nx'] = nx
+        self.pl['ny'] = ny
+        #slen      = float(self.pl['tilesize'])
+        self.pl['tilesize'] = float(self.pl['tilesize'])
         oscale = float(self.pl['oscale'])
 
         # self.features is the list of map features to be presented.
@@ -185,7 +189,7 @@ class townguide:
 
         self.nx = nx
         self.ny = ny
-        self.slen = slen
+        #self.slen = slen
         self.tilesize = float(self.pl['tilesize'])
         self.oscale = oscale
         self.uname = self.pl['uname']
@@ -259,17 +263,17 @@ class townguide:
 
 
     def drawTile(self,tx,ty):
-        minx = self.c0.x + self.slen * tx
-        miny = self.c0.y + self.slen * ty
+        minx = self.c0.x + self.pl['tilesize'] * tx
+        miny = self.c0.y + self.pl['tilesize'] * ty
         bbox = mapnik.Envelope(minx,\
                                miny,\
-                               minx+self.slen,\
-                            miny+self.slen)
+                               minx+self.pl['tilesize'],\
+                            miny+self.pl['tilesize'])
         # First draw the basic map using mapnik.
         fname = "%s/image_%02d_%02d.png" % (self.pl['outdir'],tx,ty)
         
-        imgx = int(self.slen/self.oscale)
-        imgy = int(self.slen/self.oscale)
+        imgx = int(self.pl['tilesize']/self.pl['oscale'])
+        imgy = int(self.pl['tilesize']/self.pl['oscale'])
         self.drawTile_bbox(bbox,imgx,imgy,fname)
 
         return fname
@@ -309,11 +313,17 @@ class townguide:
         c0 = self.c0
         bbox = mapnik.Envelope(c0.x,\
                                c0.y,\
-                               c0.x+self.slen*self.nx,\
-                               c0.y+self.slen*self.ny)
+                               c0.x+self.pl['tilesize']*self.pl['nx'],\
+                               c0.y+self.pl['tilesize']*self.pl['ny'])
+        print "tilesize=%d, nx=%d, oscale=%f" % \
+              (self.pl['tilesize'],self.pl['nx'],self.pl['oscale'])
+        imgXpix = int(self.pl['tilesize']*self.pl['nx']/self.pl['oscale'])
+        imgYpix = int(self.pl['tilesize']*self.pl['ny']/self.pl['oscale'])
+        print "Rendering Map to image of size (%d,%d) pixels" %\
+              (imgXpix,imgYpix)
         self.drawTile_bbox(bbox,
-                      int(self.slen*self.nx/self.pl['oscale']),
-                      int(self.slen*self.ny/self.pl['oscale']),
+                      imgXpix,
+                      imgYpix,
                       fname)
 
         # Now add the grid and labels
@@ -321,28 +331,29 @@ class townguide:
         draw = ImageDraw.Draw(im)
         fntPath = "%s/FreeSerif.ttf" % self.pl['datadir']
         print "fntPath = %s." % fntPath
-        fnt = ImageFont.truetype(fntPath, 12)
+        fntSize = int(self.pl['markersize']) * int(self.pl['dpi'])/72
+        fnt = ImageFont.truetype(fntPath, fntSize)
         for x in range(0,self.nx):
-            xpx = x*self.slen/scale
+            xpx = x*self.pl['tilesize']/self.pl['oscale']
             draw.line((xpx,0,xpx,im.size[1]), fill='white')
             str = self.xLabel(x)
-            draw.text((xpx+self.slen/scale/2,12),
+            draw.text((xpx+self.pl['tilesize']/self.pl['oscale']/2,fntSize),
                       str,
                       font=fnt,
                       fill='black')
-            draw.text((xpx+self.slen/scale/2,im.size[1]-24),
+            draw.text((xpx+self.pl['tilesize']/self.pl['oscale']/2,im.size[1]-2*fntSize),
                       str,
                       font=fnt,
                       fill='black')
         for y in range(0,self.ny):
-            ypx = (self.ny-y-1)*self.slen/scale
+            ypx = (self.ny-y-1)*self.pl['tilesize']/self.pl['oscale']
             draw.line((0,ypx,im.size[0],ypx), fill='white')
             str = self.yLabel(y)
-            draw.text((12,ypx+self.slen/scale/2),
+            draw.text((fntSize,ypx+self.pl['tilesize']/self.pl['oscale']/2),
                       str,
                       font=fnt,
                       fill='black')
-            draw.text((im.size[0]-24,ypx+self.slen/scale/2),
+            draw.text((im.size[0]-2*fntSize,ypx+self.pl['tilesize']/self.pl['oscale']/2),
                       str,
                       font=fnt,
                       fill='black')
@@ -364,11 +375,14 @@ class townguide:
                         print "I will fix this eventually!!!"
                         fx = self.c0.x
                         fy = self.c0.y
-                    imx = int((fx - self.c0.x)/scale)
-                    imy = im.size[1] - int((fy - self.c0.y)/scale)
+                    imx = int((fx - self.c0.x)/self.pl['oscale'])
+                    imy = im.size[1] - int((fy - self.c0.y)/self.pl['oscale'])
                     #print "fx=%d imx=%d c0.x=%d, fy=%d imy=%d c0.y=%d, scale=%f" %\
                     #      (fx,imx,self.c0.x,fy,imy,self.c0.y, scale)
-                    draw.ellipse((imx-6,imy-6,imx+18,imy+18),
+                    markerSize = int(self.pl['markersize']) * int(self.pl['dpi'])/72
+
+                    draw.ellipse((imx-markerSize/2,imy-markerSize/2,
+                                  imx+1.5*markerSize,imy+1.5*markerSize),
                                  fill='yellow',
                                  outline='black')
                     draw.text((imx,imy),
@@ -434,15 +448,15 @@ class townguide:
         streetIndexSorted = {}
         
         for tx in range(0,self.nx):
-            minx = c0.x + self.slen * tx
-            for ty in range(0,self.ny):
+            minx = c0.x + self.pl['tilesize'] * tx
+            for ty in range(0,self.pl['ny']):
                 sys.stdout.write("%s, " % self.cellLabel(tx,ty))
                 sys.stdout.flush()
-                miny = c0.y + self.slen * ty
+                miny = c0.y + self.pl['tilesize'] * ty
                 bbox = mapnik.Envelope(minx,\
                                        miny,\
-                                       minx+self.slen,\
-                                       miny+self.slen)
+                                       minx+self.pl['tilesize'],\
+                                       miny+self.pl['tilesize'])
                 fname = "image_%02d_%02d.png" % (tx,ty)
                 #if self.debug: print bbox
 
