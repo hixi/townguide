@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47pre4 r22446"
+   sodipodi:docname="Structure_Overview.svg"
+   inkscape:export-filename="/home/graham/townguide/src/Structure_Overview.png"
+   inkscape:export-xdpi="100.02998"
+   inkscape:export-ydpi="100.02998">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3629"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3632"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective5841"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective6063"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective6085"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective6113"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective6153"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="372.04724"
+     inkscape:cy="753.29915"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1253"
+     inkscape:window-height="722"
+     inkscape:window-x="4"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="54.548237"
+       y="29.077654"
+       id="text2816"><tspan
+         sodipodi:role="line"
+         id="tspan2818"
+         x="54.548237"
+         y="29.077654">Structure of Townguide Map Renderer and Web Interface</tspan><tspan
+         sodipodi:role="line"
+         x="54.548237"
+         y="46.577652"
+         id="tspan2820">G. Jones, 11 March 2010</tspan></text>
+    <g
+       id="g5013"
+       transform="translate(-1.0101522,100.0051)">
+      <rect
+         y="90.69696"
+         x="34.345188"
+         height="67.680222"
+         width="150.51273"
+         id="rect2822"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text2824"
+         y="106.8594"
+         x="44.446712"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="106.8594"
+           x="44.446712"
+           id="tspan2826"
+           sodipodi:role="line">XML Townguide</tspan><tspan
+           id="tspan2828"
+           y="124.3594"
+           x="44.446712"
+           sodipodi:role="line">Configuration File</tspan></text>
+    </g>
+    <g
+       id="g5019"
+       transform="translate(-4.0406102,-127.27922)">
+      <rect
+         y="202.8239"
+         x="28.284271"
+         height="70.710678"
+         width="159.6041"
+         id="rect2830"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text2832"
+         y="218.98633"
+         x="43.436558"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="218.98633"
+           x="43.436558"
+           id="tspan2834"
+           sodipodi:role="line">XML Mapnik Style</tspan><tspan
+           id="tspan2836"
+           y="236.48633"
+           x="43.436558"
+           sodipodi:role="line">File</tspan></text>
+    </g>
+    <g
+       id="g5008">
+      <rect
+         y="116.96092"
+         x="267.69043"
+         height="82.832512"
+         width="193.9493"
+         id="rect2838"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text2840"
+         y="140.19443"
+         x="289.91379"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="140.19443"
+           x="289.91379"
+           id="tspan2842"
+           sodipodi:role="line">Townguide.py</tspan></text>
+    </g>
+    <g
+       id="g5002">
+      <rect
+         y="95.747719"
+         x="535.38086"
+         height="65.659912"
+         width="172.73608"
+         id="rect2844"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text2846"
+         y="108.87971"
+         x="547.50269"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="108.87971"
+           x="547.50269"
+           id="tspan2848"
+           sodipodi:role="line">Townguide_Poster.pdf</tspan><tspan
+           id="tspan2850"
+           y="126.37971"
+           x="547.50269"
+           sodipodi:role="line">- The Output!</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend);stroke-miterlimit:4;stroke-dasharray:none"
+       d="m 184.85792,119.99138 c 81.82235,17.1726 82.8325,17.1726 82.8325,17.1726 l 1.01016,1.01015"
+       id="path3624" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="m 184.85792,118.98123 82.8325,23.23351"
+       id="path4074" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="m 185.86807,233.12847 81.82235,-56.56854"
+       id="path4630" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="m 457.5991,158.37718 76.7716,-27.27412"
+       id="path4816" />
+    <g
+       id="g6099"
+       transform="translate(433.35544,-110.10663)">
+      <rect
+         y="404.8544"
+         x="36.36549"
+         height="71.720833"
+         width="175.76654"
+         id="rect5046"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text5048"
+         y="424.0473"
+         x="43.436558"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="424.0473"
+           x="43.436558"
+           id="tspan5050"
+           sodipodi:role="line">Postgresql Database</tspan><tspan
+           y="441.5473"
+           x="43.436558"
+           sodipodi:role="line"
+           id="tspan6053">(Map Data)</tspan></text>
+    </g>
+    <g
+       id="g6099-4"
+       transform="translate(432.34529,-244.96199)">
+      <g
+         transform="translate(31.314729,433.35545)"
+         id="g6139">
+        <rect
+           style="fill:#d11919;fill-opacity:0.25098039;stroke:none"
+           id="rect5046-8"
+           width="175.76654"
+           height="71.720833"
+           x="36.36549"
+           y="404.8544" />
+        <text
+           xml:space="preserve"
+           style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+           x="43.436558"
+           y="424.0473"
+           id="text5048-4"><tspan
+             sodipodi:role="line"
+             id="tspan5050-4"
+             x="43.436558"
+             y="424.0473">Postgresql Database</tspan><tspan
+             id="tspan6053-2"
+             sodipodi:role="line"
+             x="43.436558"
+             y="441.5473">(Rendering Queue)</tspan></text>
+      </g>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstart);marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="M 491.94428,290.70716 440.42651,199.79343"
+       id="path5057"
+       sodipodi:nodetypes="cc" />
+    <g
+       id="g5827"
+       transform="translate(3.0304576,140.41121)">
+      <rect
+         y="463.44324"
+         x="27.274118"
+         height="68.690376"
+         width="167.68532"
+         id="rect5805"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text5807"
+         y="479.60568"
+         x="39.39595"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="479.60568"
+           x="39.39595"
+           id="tspan5809"
+           sodipodi:role="line">submitForm.php</tspan><tspan
+           id="tspan5811"
+           y="497.10568"
+           x="39.39595"
+           sodipodi:role="line">(Main Web UI Page)</tspan></text>
+    </g>
+    <g
+       id="g5821">
+      <flowRoot
+         style="fill:black;stroke:none;stroke-opacity:1;stroke-width:1px;stroke-linejoin:miter;stroke-linecap:butt;fill-opacity:1;font-family:Bitstream Vera Sans;font-style:normal;font-weight:normal;font-size:14"
+         id="flowRoot5813"
+         xml:space="preserve"><flowRegion
+           id="flowRegion5815"><rect
+             y="447.28082"
+             x="10.101525"
+             height="123.23861"
+             width="280.82242"
+             id="rect5817" /></flowRegion><flowPara
+           id="flowPara5819"></flowPara></flowRoot>    </g>
+    <g
+       transform="translate(233.34525,139.40106)"
+       id="g5827-0">
+      <rect
+         y="463.44324"
+         x="27.274118"
+         height="68.690376"
+         width="167.68532"
+         id="rect5805-4"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text5807-7"
+         y="479.60568"
+         x="39.39595"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="479.60568"
+           x="39.39595"
+           id="tspan5809-8"
+           sodipodi:role="line">submitForm.php</tspan><tspan
+           id="tspan5811-7"
+           y="497.10568"
+           x="39.39595"
+           sodipodi:role="line">(Main Web UI Page)</tspan></text>
+    </g>
+    <g
+       id="g5827-4"
+       transform="translate(238.396,-55.558372)">
+      <rect
+         y="463.44324"
+         x="27.274118"
+         height="68.690376"
+         width="167.68532"
+         id="rect5805-3"
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:none" />
+      <text
+         id="text5807-9"
+         y="479.60568"
+         x="39.39595"
+         style="font-size:14px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           id="tspan5811-6"
+           y="479.60568"
+           x="39.39595"
+           sodipodi:role="line">renderQueue.py</tspan><tspan
+           y="497.10568"
+           x="39.39595"
+           sodipodi:role="line"
+           id="tspan6181">(Render Queue </tspan><tspan
+           y="514.60571"
+           x="39.39595"
+           sodipodi:role="line"
+           id="tspan6183">Daemon)</tspan></text>
+      <path
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:#000000;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+         d="m 194.95944,793.76313 65.65992,-1.01015"
+         id="path6185"
+         transform="translate(-238.396,-100.00512)" />
+      <path
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:#000000;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+         d="m 427.29453,789.72252 75.76144,-1.01015 0,0 0,0"
+         id="path6373"
+         transform="translate(-238.396,-100.00512)" />
+      <path
+         style="fill:#d11919;fill-opacity:0.25098039;stroke:#000000;stroke-width:1;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker-start:url(#Arrow1Lstart);marker-end:url(#Arrow1Lend)"
+         d="M 532.35039,752.34688 403.05087,633.14888"
+         id="path6561"
+         transform="translate(-238.396,-100.00512)" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="M 280.82241,406.87471 169.70563,258.38228"
+       id="path6946" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="M 334.36049,406.87471 331.33003,198.78328"
+       id="path7134" />
+  </g>
+</svg>
