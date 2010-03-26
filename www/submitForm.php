@@ -86,7 +86,7 @@ pageTracker._trackPageview();
 <h3>Request TownGuide Production</h3>
 <p>Adjust the map below so that the bottom left corner is where you want the 
 bottom left corner of your townguide map.  Adjust the map size in units of 
-1km squares</p>
+1km squares.  Press the "Submit Request" Button in the bottom right hand corner of the page to produce your map.</p>
 <FORM action="submitRenderRequest.php" method="POST">
 <table border="1">
   <tbody>
@@ -199,6 +199,12 @@ bottom left corner of your townguide map.  Adjust the map size in units of
       <td><INPUT type="checkbox"  id="shopping" name="shopping"></td>
       <td>Banking</td>
       <td><INPUT type="checkbox"  id="banking" name="banking"></td>
+    </tr>
+    <tr>
+      <td>Libraries</td>
+      <td><INPUT type="checkbox"  id="libraries" name="libraries"></td>
+      <td></td>
+      <td></td>
     </tr>
   </table>
   <table><tr>

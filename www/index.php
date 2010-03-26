@@ -32,7 +32,7 @@ selectable set of features (a street index, or lists of pubs,
 restaurants, shops, banks etc.).  The idea is that it will help you to produce
 useable printed maps, with a street index and selectable points of interest
 highlighted.</p>
-<p>The Data is derived from the <a href="http://www.openstreetmap.org/" name="OpenStreetMap"></a> project, which is a freely available map dataset, that can be edited by anyone.
+<p>The Data is derived from the <a href="http://www.openstreetmap.org/" name="OpenStreetMap">Open Street Map</a> project, which is a freely available map dataset, that can be edited by anyone.
 </p>
 <p>Examples of the town guide generator output can be seen by clicking on the following images:</p>
 <table align="center">

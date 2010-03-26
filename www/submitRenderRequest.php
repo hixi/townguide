@@ -16,6 +16,7 @@
   $leisure     = $_REQUEST['leisure'] ;
   $shopping    = $_REQUEST['shopping'] ;
   $banking     = $_REQUEST['banking'] ;
+  $libraries   = $_REQUEST['libraries'] ;
   $dpi         = $_REQUEST['dpi'];
   $markersize  = $_REQUEST['markersize'];
 
@@ -77,6 +78,11 @@
     if ($featureStr!="")
         $featureStr=$featureStr.',';
     $featureStr = $featureStr."Banking:amenity='bank'|'atm'"; 
+  } 
+  if ($libraries=='on') {
+    if ($featureStr!="")
+        $featureStr=$featureStr.',';
+    $featureStr = $featureStr."Libraries:amenity='library'"; 
   } 
 
   if ($featureStr=="") {

@@ -112,6 +112,7 @@ function zoomMap()
 				       origin.lon+1000*nx,
 				       origin.lat+1000*ny);
     map.zoomToExtent(bounds);
+    map.zoomToScale(10000000.);
 
 }
 /* Main initialisation function. Must be called before the map is manipulated. */
@@ -139,5 +140,6 @@ function init()
     map.events.register('moveend', map, updateForm);
     updateMap();
     zoomMap();
+    /*map.zoomto(5);*/
 }
 
