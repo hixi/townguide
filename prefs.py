@@ -174,139 +174,153 @@ class prefs(handler.ContentHandler):
             print "ERROR: we have ended an element, but we are not in an element!!!: Ignoring"             
 
 
-import pygtk
-pygtk.require("2.0")
-import gtk
+try:
+    import pygtk
+    pygtk.require("2.0")
+    import gtk
 
-class prefGUI:
-    def __init__(self,allowAdd=True,
-                 allowDelete=True,
-                 allowChangeKeys=True,
-                 allowChangeValues=True):
-        print "prefGUI.__init__"
+    class prefGUI:
+        def __init__(self,allowAdd=True,
+                     allowDelete=True,
+                     allowChangeKeys=True,
+                     allowChangeValues=True):
+            print "prefGUI.__init__"
 
-        self.allowAdd=allowAdd
-        self.allowDelete=allowDelete
-        self.allowChangeKeys=allowChangeKeys
-        self.allowChangeValues=allowChangeValues
+            self.allowAdd=allowAdd
+            self.allowDelete=allowDelete
+            self.allowChangeKeys=allowChangeKeys
+            self.allowChangeValues=allowChangeValues
 
-        self.newPreflist = None
-        builder = gtk.Builder()
-        builder.add_from_file("prefs.glade")
-        builder.connect_signals(self)
-        self.window = builder.get_object("prefDialogWindow")
-        self.confDelDlg = builder.get_object("confirmDeleteDialog")
-        self.loadFileChooserDlg = builder.get_object("prefFileChooserDialog")
-
-        b = builder.get_object("addButton")
-        if self.allowAdd==False:
-            b.hide()
-        else:
-            b.show()
-        b = builder.get_object("deleteButton")
-        if self.allowDelete==False:
-            b.hide()
-        else:
-            b.show()
-
-
-        self.store = gtk.ListStore(str,str)
-        self.treeview = builder.get_object("treeview1")
-        self.treeview.set_model(self.store)
-        
-        # create the TreeViewColumn to display the data (Keys First)
-        keycell = gtk.CellRendererText()
-        if self.allowChangeKeys:
-            keycell.set_property('editable',True)
-            keycell.connect('edited',self.on_edited_event,(self.store,0))
-        else:
-            keycell.set_property('editable',False)
-        tvcolumn = gtk.TreeViewColumn('Key')
-        tvcolumn.pack_start(keycell, True)
-        tvcolumn.add_attribute(keycell, 'text', 0)
-        tvcolumn.set_sort_column_id(0)
-        self.treeview.append_column(tvcolumn)
-
-        # now values
-        valcell = gtk.CellRendererText()
-        if self.allowChangeValues:
-            valcell.set_property('editable',True)
-            valcell.connect('edited',self.on_edited_event,(self.store,1))
-        else:
-            valcell.set_property('editable',False)
-        tvcolumn = gtk.TreeViewColumn('Value')
-        tvcolumn.pack_start(valcell, True)
-        tvcolumn.add_attribute(valcell, 'text', 1)
-        tvcolumn.set_sort_column_id(1)
-        self.treeview.append_column(tvcolumn)
-
-        self.treeview.set_search_column(0)
-
-
-    def guiEdit(self,preflist):
-        # Populate the list store object from the preference list supplied
-        # to init.
-        for p in preflist:
-            print "pref",p,preflist[p]
-            self.store.append([p,preflist[p]])
-
-        self.window.show()
-        self.window.run()
-
-    def getNewPreflist(self):
-        return self.newPreflist
-
-
-    def on_edited_event(self,cell,path,new_text,data):
-        store,colno=data
-        print "on_edited_event - colno=",colno," text=",new_text
-        store[path][colno]=new_text
-        return
-
-    def on_okButton_clicked(self,widget,data=None):
-        print "on_okButton_clicked"
-        self.window.hide()
-        it = self.store.get_iter_first()
-        if (it!=None):
-            self.newPreflist = {}
-            
-
-            while (it!=None):
-                key = self.store.get_value(it,0)
-                value = self.store.get_value(it,1)
-                print key,":",value
-                self.newPreflist[key]=value
-                it = self.store.iter_next(it)
-        else:
             self.newPreflist = None
+            builder = gtk.Builder()
+            builder.add_from_file("prefs.glade")
+            builder.connect_signals(self)
+            self.window = builder.get_object("prefDialogWindow")
+            self.confDelDlg = builder.get_object("confirmDeleteDialog")
+            self.loadFileChooserDlg = builder.get_object("prefFileChooserDialog")
 
-    def on_cancelButton_clicked(self,widget,data=None):
-        print "on_cancelButton_clicked"
-        self.newPrefList = None
-        self.window.hide()
-        
-    def on_addButton_clicked(self,widget,data=None):
-        print "on_addButton_clicked"
-        it =self.store.append()
-        ts = self.treeview.get_selection()
-        ts.select_iter(it)
-
-    def on_deleteButton_clicked(self,widget,data=None):
-        print "on_deleteButton_clicked"
-        ts = self.treeview.get_selection()
-        model,it = ts.get_selected()
-        if (it!=None):
-            response=self.confDelDlg.run()
-            self.confDelDlg.hide()
-            if (response==gtk.RESPONSE_YES):
-                print "deleting..."
-                del model[it]
+            b = builder.get_object("addButton")
+            if self.allowAdd==False:
+                b.hide()
             else:
-                print "ok - leaving it alone"
-        else:
-            print "no row selected - ignoring delete" 
+                b.show()
+            b = builder.get_object("deleteButton")
+            if self.allowDelete==False:
+                b.hide()
+            else:
+                b.show()
 
-  
+
+            self.store = gtk.ListStore(str,str)
+            self.treeview = builder.get_object("treeview1")
+            self.treeview.set_model(self.store)
+
+            # create the TreeViewColumn to display the data (Keys First)
+            keycell = gtk.CellRendererText()
+            if self.allowChangeKeys:
+                keycell.set_property('editable',True)
+                keycell.connect('edited',self.on_edited_event,(self.store,0))
+            else:
+                keycell.set_property('editable',False)
+            tvcolumn = gtk.TreeViewColumn('Key')
+            tvcolumn.pack_start(keycell, True)
+            tvcolumn.add_attribute(keycell, 'text', 0)
+            tvcolumn.set_sort_column_id(0)
+            self.treeview.append_column(tvcolumn)
+
+            # now values
+            valcell = gtk.CellRendererText()
+            if self.allowChangeValues:
+                valcell.set_property('editable',True)
+                valcell.connect('edited',self.on_edited_event,(self.store,1))
+            else:
+                valcell.set_property('editable',False)
+            tvcolumn = gtk.TreeViewColumn('Value')
+            tvcolumn.pack_start(valcell, True)
+            tvcolumn.add_attribute(valcell, 'text', 1)
+            tvcolumn.set_sort_column_id(1)
+            self.treeview.append_column(tvcolumn)
+
+            self.treeview.set_search_column(0)
+
+
+        def guiEdit(self,preflist):
+            # Populate the list store object from the preference list supplied
+            # to init.
+            for p in preflist:
+                print "pref",p,preflist[p]
+                self.store.append([p,preflist[p]])
+
+            self.window.show()
+            self.window.run()
+
+        def getNewPreflist(self):
+            return self.newPreflist
+
+
+        def on_edited_event(self,cell,path,new_text,data):
+            store,colno=data
+            print "on_edited_event - colno=",colno," text=",new_text
+            store[path][colno]=new_text
+            return
+
+        def on_okButton_clicked(self,widget,data=None):
+            print "on_okButton_clicked"
+            self.window.hide()
+            it = self.store.get_iter_first()
+            if (it!=None):
+                self.newPreflist = {}
+
+
+                while (it!=None):
+                    key = self.store.get_value(it,0)
+                    value = self.store.get_value(it,1)
+                    print key,":",value
+                    self.newPreflist[key]=value
+                    it = self.store.iter_next(it)
+            else:
+                self.newPreflist = None
+
+        def on_cancelButton_clicked(self,widget,data=None):
+            print "on_cancelButton_clicked"
+            self.newPrefList = None
+            self.window.hide()
+
+        def on_addButton_clicked(self,widget,data=None):
+            print "on_addButton_clicked"
+            it =self.store.append()
+            ts = self.treeview.get_selection()
+            ts.select_iter(it)
+
+        def on_deleteButton_clicked(self,widget,data=None):
+            print "on_deleteButton_clicked"
+            ts = self.treeview.get_selection()
+            model,it = ts.get_selected()
+            if (it!=None):
+                response=self.confDelDlg.run()
+                self.confDelDlg.hide()
+                if (response==gtk.RESPONSE_YES):
+                    print "deleting..."
+                    del model[it]
+                else:
+                    print "ok - leaving it alone"
+            else:
+                print "no row selected - ignoring delete" 
+
+except:
+    class prefGUI:
+        def __init__(self,allowAdd=True,
+                     allowDelete=True,
+                     allowChangeKeys=True,
+                     allowChangeValues=True):
+            print "prefGUI.__init__"
+        def guiEdit(self,preflist):
+            pass
+
+        def getNewPreflist(self):
+            pass
+
+    
 
 """
 Main program called if this python script file is executed directly rather than used as
