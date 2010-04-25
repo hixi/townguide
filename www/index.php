@@ -74,6 +74,9 @@ job queue using the link below.</p>
 <p>Reliability of this service is not promised at the moment though 
 - this is very much work in
 progress!</p>
+<p>I see that some people are having trouble with this service apparently running successfully, but either producing no output, or a blank map.  I do not know why this is, so if this happens to you, please either email me (grahamjones139 at gmail dot com), or raise an 'issue' at <a href="http://www.code.google.com/p/townguide">
+http://www.code.google.com/p/townguide</a> and I will look into it.
+</p>
 
 <h3>View Job Queue</h3>
 <p>You can view the job request queue usng the link below</p>

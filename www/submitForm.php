@@ -123,7 +123,7 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 		    <INPUT type="text" 
 			   name="nx" id="nx" 
 			   value="3" size="2" 
-			   maxlength="2"
+			   maxlength="3"
 			   onChange="zoomMap()">
 		    </td>
 		  <td><img src="plus.png" onClick="increment('nx')"></td>
@@ -138,7 +138,7 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 		    <INPUT type="text" 
 			   name="ny" id="ny" 
 			   value="3" size="2" 
-			   maxlength="2"
+			   maxlength="3"
 			   onChange="zoomMap()">
 		    </td>
 		  <td><img src="plus.png" onClick="increment('ny')"></td>
