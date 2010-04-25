@@ -151,7 +151,7 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 	    <td>Output Format</td>
 	    <td><SELECT name="format">
 		<option value="html">HTML</option>
-		<option value="pdf">PDF Booklet</option>
+		<option value="book">PDF Booklet</option>
 		<option selected value="poster">PDF Poster</option>
 		
 	    </SELECT></td>

@@ -130,8 +130,9 @@ class townguide:
             'tilesize': '1000',
             'oscale': '10',
             'markersize':'12',
-            'datadir': '/home/disk2/graham/ntmisc/townguide',
+            'datadir': '/home/disk2/www/townguide',
             'mapfile': '/home/disk2/graham/ntmisc/townguide/osm.xml',
+            'outdir': '.',
             'uname': 'graham',
             'dbname': 'mapnik',
             'download': 'False',
@@ -144,7 +145,6 @@ class townguide:
         self.pr = pr
         self.pl = pr.getPrefs()
         print self.pl
-        print "datadir=%s" % self.pl['datadir']
         self.pr.applyDefaults(defaults)
         self.pl = pr.getPrefs()
         print "datadir=%s" % self.pl['datadir']
@@ -167,7 +167,7 @@ class townguide:
         #slen      = float(self.pl['tilesize'])
         self.pl['tilesize'] = float(self.pl['tilesize'])
         oscale = float(self.pl['oscale'])
-
+        self.pl['oscale']=float(self.pl['oscale'])
         # self.features is the list of map features to be presented.
         self.features = []
         featstrs = self.pl['features'].split(',')
@@ -776,20 +776,32 @@ class townguide:
             url="http://www.openstreetmap.org/api/0.6/map?bbox=%f,%f,%f,%f" %\
                  (self.lon,self.lat,lon,lat)
 
-        os.system("wget %s -O %s/townguide.osm" % (url,self.pl['outdir']))
+        osmFile = "%s/townguide.osm" % (self.pl['outdir'])
 
-        print 'Importing data into postgresql database....'
-        osm2pgsqlStr = "osm2pgsql -m -S %s/%s -d %s -s %s/townguide.osm" %\
-                  (self.pl['datadir'],
-                   "default.style",
-                   self.pl['dbname'],
-                   self.pl['outdir'])
-        print "Calling osm2pgsql with: %s" % osm2pgsqlStr
-        
-        os.system(osm2pgsqlStr)
+        os.system("wget %s -O %s" % (url,osmFile))
 
-        print 'Data import complete.'
-
+        if os.path.exists(osmFile):
+            try:
+                print 'Importing data into postgresql database....'
+                osm2pgsqlStr = "osm2pgsql -m -S %s/%s -d %s -s %s" %\
+                           (self.pl['datadir'],
+                            "default.style",
+                            self.pl['dbname'],
+                            osmFile)
+                print "Calling osm2pgsql with: %s" % osm2pgsqlStr
+                retval = os.system(osm2pgsqlStr)
+                if (retval==0):
+                    print 'Data import complete.'
+                else:
+                    print 'osm2pgsql returned %d - exiting' % retval
+                    system.exit(-1)
+            except:
+                print "Exception Occurred running osm2pgsql"
+                system.exit(-1)
+        else:
+            print "ERROR:  Failed to download OSM data"
+            print "Aborting...."
+            system.exit(-1)
 
 if __name__ == "__main__":
     from optparse import OptionParser
