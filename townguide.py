@@ -99,6 +99,7 @@ $Rev$
 $Author$
 """
 from prefs import prefs
+import cairo
 import sys
 import psycopg2 as psycopg
 import mapnik
@@ -130,6 +131,7 @@ class townguide:
             'tilesize': '1000',
             'oscale': '10',
             'markersize':'12',
+            'mapnik_renderer':'agg',
             'datadir': '/home/disk2/www/townguide',
             'mapfile': '/home/disk2/graham/ntmisc/townguide/osm.xml',
             'outdir': '.',
@@ -285,7 +287,9 @@ class townguide:
 
         29sep2009  GJ  ORIGINAL VERSION, based on generate_image.py
         06jan2010  GJ  Renamed to drawTile_bbox from drawTile
+        06jun2010  GJ  Added support for mapnik_renderer option to select between agg and cairo renderers.
         """
+
         mapfile = str(self.pl['mapfile'])
         map_uri = str(fname)
         print ("mapfile=%s" % mapfile)
@@ -293,11 +297,25 @@ class townguide:
         m = mapnik.Map(imgx,imgy)
         mapnik.load_map(m,mapfile)
         m.zoom_to_box(bbox)
-        im = mapnik.Image(imgx,imgy)
-        mapnik.render(m, im)
-        view = im.view(0,0,imgx,imgy) # x,y,width,height
-        view.save(map_uri,'png')
+        if self.pl['mapnik_renderer']=='agg':
+            print "Generating map image using Mapnik's agg renderer."
+            im = mapnik.Image(imgx,imgy)
+            mapnik.render(m, im)
+            view = im.view(0,0,imgx,imgy) # x,y,width,height
+            view.save(map_uri,'png')
+        elif self.pl['mapnik_renderer']=='cairo':
+            print "Generating PDF output of bare map using Mapnik's cairo renderer."
+            file = open("%s.pdf" % map_uri, 'wb')
+            surface = cairo.PDFSurface(file.name, m.width,m.height)
+            mapnik.render(m,surface)
+            surface.finish()
 
+            convertStr = "convert -density %s %s %s" % (self.pl['dpi'],file.name, map_uri)
+            print "converting map PDF to png image using: %s" % convertStr
+            os.system(convertStr)
+
+        else:
+            print "ERROR - specified renderer '%s' unreconised." % self.pl['mapnik_renderer']
 
             
     def drawOverviewMap(self,outdir='',addFeatures=False):
