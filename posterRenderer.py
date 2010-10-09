@@ -72,6 +72,13 @@ class posterRenderer():
             }
 
         tg.pr.applyDefaults(defPrefs)
+
+        # Register unicode font
+        from reportlab.pdfbase.ttfonts import TTFont
+        from reportlab.pdfbase import pdfmetrics
+        unifont = TTFont('unifont', "%s/unifont.ttf" % (tg.pl['datadir']))
+        pdfmetrics.registerFont(    unifont    )
+
         
         self.setStyles()
 
@@ -268,9 +275,11 @@ class posterRenderer():
         ################################################################
         # render the streets in aphabetical order
         if self.tg.pl['streetIndex'].lower()=='true':
-            style.fontName = "Times-Bold"
+            #style.fontName = "Times-Bold"
+            style.fontName = "unifont"
             Story.append(platypus.Paragraph("Street Index",style))
-            style.fontName = "Times-Roman"
+            #style.fontName = "Times-Roman"
+            style.fontName = "unifont"
             streets = self.tg.streetIndex.keys()
             streets.sort()
             for street in streets:
@@ -286,17 +295,21 @@ class posterRenderer():
             #Do not do a frame break if this is the first frame.
             if self.tg.pl['streetIndex'].lower()=='true':
                 Story.append(platypus.FrameBreak())
-            style.fontName = "Times-Bold"
+            #style.fontName = "Times-Bold"
+            style.fontName = "unifont"
             Story.append(platypus.Paragraph("Points of Interest",style))
-            style.fontName = "Times-Roman"
+            #style.fontName = "Times-Roman"
+            style.fontName = "unifont"
             featurelist = self.tg.amenities.keys()
             #print self.tg.amenities
             featurelist.sort()
             featureNo = 1
             for feature in featurelist:
-                style.fontName = "Times-Bold"
+                #style.fontName = "Times-Bold"
+                style.fontName = "unifont"
                 Story.append(platypus.Paragraph(feature,style))
-                style.fontName = "Times-Roman"
+                #style.fontName = "Times-Roman"
+                style.fontName = "unifont"
                 for rec in self.tg.amenities[feature]:
                     #print rec
                     lbl = self.tg.cellLabel(rec[0],rec[1])
@@ -327,9 +340,11 @@ class posterRenderer():
         canvas.rect(5, 5, PAGE_WIDTH-10, PAGE_HEIGHT-10,fill=1)
         canvas.restoreState()
         canvas.saveState()
-        canvas.setFont('Times-Bold',16)
+        #canvas.setFont('Times-Bold',16)
+        canvas.setFont('unifont',16)
         canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT-(doc.topMargin/2), self.tg.title)
-        canvas.setFont('Times-Roman',9)
+        #canvas.setFont('Times-Roman',9)
+        canvas.setFont('unifont',9)
         canvas.drawString(doc.leftMargin, (doc.bottomMargin/2), "Page %s" \
                           % doc.page)
         revStr = "$Rev$"

@@ -348,7 +348,8 @@ class townguide:
         # Now add the grid and labels
         im = Image.open(fname)
         draw = ImageDraw.Draw(im)
-        fntPath = "%s/FreeSerif.ttf" % self.pl['datadir']
+#        fntPath = "%s/FreeSerif.ttf" % self.pl['datadir']
+	fntPath = "%s/unifont.ttf" % self.pl['datadir']
         print "fntPath = %s." % fntPath
         fntSize = int(self.pl['markersize']) * int(self.pl['dpi'])/72
         fnt = ImageFont.truetype(fntPath, fntSize)
