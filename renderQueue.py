@@ -231,14 +231,19 @@ class renderQueue:
 
             tg = townguide.townguide(pr)
             self.setJobStatus(jobNo,self.COMPLETE)
+            sys.stdout.flush()
             #sys.stdout = queueLog
             #sys.stderr = queueLog
             #except:
             #    print "Oh No - error opening log file, or townguide failed"
             #    self.setJobStatus(jobNo,self.ERROR)
-        except:
+        except Exception, e:
             print "Oh No - Error processing job number %d" % jobNo
+            print "Unexpected error:", sys.exc_info()[0]
+            print "%s" % (dir(e))
+            print sys.exc_info()
             self.setJobStatus(jobNo,self.ERROR)
+            #raise
         #time.sleep(5)
         
     
@@ -420,7 +425,7 @@ if __name__ == "__main__":
                       help="Return the position of specified job no in queue.")
     parser.add_option("-c", "--config", dest="cfname",
                       help="Configuration File Name")
-    parser.add_option("--pidfile", dest="pidfile",
+    parser.add_option("--pid_file", dest="pidfile",
                       help="not used")
     parser.add_option("--logdir", dest="logdir",
                       help="not used")
@@ -431,7 +436,7 @@ if __name__ == "__main__":
         fname=None,
         position="-999",
         cfname=None,
-        pidfile=None,
+        pidfile="/home/disk2/www/townguide/www/output/renderQueue.pid",
         logdir=None)
     (options,args)=parser.parse_args()
     
@@ -449,6 +454,7 @@ if __name__ == "__main__":
         print "Using standard input and output streams"
 
     print
+    print options
 
 
         

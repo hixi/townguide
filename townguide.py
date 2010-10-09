@@ -127,7 +127,7 @@ class townguide:
         defaults={
             'debug': 'False',
             'origin': '54.6466,-1.2619',
-            'mapzize': '3,3',
+            'mapsize': '3,3',
             'tilesize': '1000',
             'oscale': '10',
             'markersize':'12',
@@ -222,7 +222,8 @@ class townguide:
         if self.pl['format']=='html':
             print "Rendering html map and text"
             self.drawOverviewMap(self.outdir)
-            tr = htmlRenderer(self)
+            #tr = htmlRenderer(self)
+            tr = posterRenderer(self)
             tr.render()
             #self.renderHTML()
         elif self.pl['format']=='book':

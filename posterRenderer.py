@@ -107,12 +107,12 @@ class posterRenderer():
         #self.styles.list()
 
         self.mf = float(self.tg.pl['mapvfrac'])/100.
-        self.topMargin=int(self.tg.pl['topMargin'])
-        self.bottomMargin=int(self.tg.pl['bottomMargin'])
-        self.leftMargin=int(self.tg.pl['leftMargin'])
-        self.rightMargin=int(self.tg.pl['leftMargin'])
+        self.topMargin=int(float(self.tg.pl['topMargin']))
+        self.bottomMargin=int(float(self.tg.pl['bottomMargin']))
+        self.leftMargin=int(float(self.tg.pl['leftMargin']))
+        self.rightMargin=int(float(self.tg.pl['leftMargin']))
 
-        self.titleFrameHeight = int(self.tg.pl['titleFrameHeight'])
+        self.titleFrameHeight = int(float(self.tg.pl['titleFrameHeight']))
         self.columnWidth = float(self.tg.pl['columnWidth'])
         
         self.titleStyle = self.styles["Title"]
@@ -274,8 +274,11 @@ class posterRenderer():
             streets = self.tg.streetIndex.keys()
             streets.sort()
             for street in streets:
-                p = Paragraph("%s (%s)" \
-                              % (street,self.tg.streetIndex[street]),style)
+                streetStr = "%s (%s)" \
+                              % (street,self.tg.streetIndex[street])
+                print streetStr
+                p = Paragraph(streetStr,style)
+                            
                 Story.append(p)
 
 
