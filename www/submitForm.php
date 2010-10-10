@@ -5,7 +5,7 @@
 
 <script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
 <script type="text/javascript" src="http://www.openstreetmap.org/openlayers/OpenStreetMap.js"></script>
-<script type="text/javascript" src="/osm_map.js"></script>
+<script type="text/javascript" src="osm_map.js"></script>
 
 
 <script>

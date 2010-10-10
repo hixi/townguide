@@ -13,11 +13,11 @@ set -e
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="renderQueue townguide job queue manager"
 NAME=renderQueue
-DAEMON=/home/disk2/www/townguide/$NAME
-PIDFILE=/home/disk2/www/townguide/www/output/$NAME.pid
+DAEMON=/var/www/townguide/$NAME
+PIDFILE=/var/www/townguide/www/output/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 USER=www
-LOGDIR=/home/disk2/www/townguide/www/output
+LOGDIR=/var/www/townguide/www/output
 
 # Read config file if it is present.
 if [ -r /etc/default/$NAME ]
