@@ -204,7 +204,13 @@ class renderQueue:
 
         jobDir = "%s/%d" % (self.wkdir,jobNo)
         if not os.path.exists(jobDir):
-            os.makedirs(jobDir)
+            try:
+                os.makedirs(jobDir)
+            except:
+                print "***********************************************"
+                print "odd - got an error making the output directory"
+                print "trying to carry on regardless!!!"
+                print "***********************************************"
 
         xmlFile = "%s/townguide.xml" % (jobDir)
         try:
