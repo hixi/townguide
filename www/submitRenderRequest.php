@@ -6,6 +6,7 @@
   $ny          = $_REQUEST['ny'] ;
   $format      = $_REQUEST['format'];
   $papersize   = $_REQUEST['papersize'];
+  $renderer    = $_REQUEST['renderer'];
   $streetIndex = $_REQUEST['streetIndex'] ;
   $featureList = $_REQUEST['featureList'] ;
   $pubs        = $_REQUEST['pubs'] ;
@@ -23,6 +24,7 @@
   $nowStr = gmDate("Y-m-d H:i:s");
 
   $xmlStr="<xml>\n";
+  $xmlStr.="<debug>False</debug>\n";
   $xmlStr.="<title>".$title."</title>\n";
   $xmlStr.="<format>".$format."</format>\n";
   $xmlStr.="<pagesize>".$papersize."</pagesize>\n";
@@ -99,9 +101,10 @@
   $xmlStr.="<mapsize>".$nx.",".$ny."</mapsize>\n";
   $xmlStr.="<dpi>".$dpi."</dpi>\n";
   $xmlStr.="<markersize>".$markersize."</markersize>\n";
+  $xmlStr.="<dbname>gis</dbname>\n";
   $xmlStr.="<uname>www</uname>\n";
   $xmlStr.="<password>1234</password>\n";
-  $xmlStr.="<download>True</download>\n";
+  $xmlStr.="<download>False</download>\n";
   $xmlStr.="</xml>\n";
 
   $xmlStrSafe = str_replace("'","\'",$xmlStr);
@@ -117,18 +120,19 @@
 
 
   $query  = "insert into queue (status, title, originlat, originlon,"
-  	  . "subdate, statusdate, xml) values "
+  	  . "subdate, statusdate, renderer, xml) values "
   	  . "( 0, "."'".$title."'" 
 	  . ", ".$lat.", ".$lon.", "
 	  . "timestamp '".$nowStr."', timestamp '".$nowStr."',"
-	  . " '".$xmlStrSafe."') returning jobno;";
+	  . $renderer."," 
+	  ." '".$xmlStrSafe."') returning jobno;";
        
   $result = pg_query($query) or die('Query failed: ' . pg_last_error());
   $line = pg_fetch_array($result);
   $jobNo=$line['jobno'];	
 
-  mkdir ("/home/disk2/www/townguide/www/output/".$jobNo,0777);
-  chmod ("/home/disk2/www/townguide/www/output/".$jobNo,0777);
+  mkdir ("/var/www/townguide/www/output/".$jobNo,0777);
+  chmod ("/var/www/townguide/www/output/".$jobNo,0777);
    
   print "<h1>Job Submitted</h1>";
   print "<p>Your Job Number is ".$jobNo."</p>";

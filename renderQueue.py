@@ -24,6 +24,7 @@ from datetime import datetime
 import time
 from prefs import prefs
 import townguide
+#import townguide2 as townguide
 
 WDIR = '/home/disk2/www/townguide'
 
@@ -194,13 +195,15 @@ class renderQueue:
                                          'user=%s' % self.uname)
         mark = connection.cursor()
 
-        sqlstr = "select * from queue where jobno=%d;" \
+        sqlstr = "select jobno, renderer,xml from queue where jobno=%d;" \
             % jobNo
         
         mark.execute(sqlstr)
-        records = mark.fetchall()
-        xmlStr = records[0][len(records[0])-1]   #xmlStr is last field
-        #print "xmlStr = %s" % xmlStr
+        recordArr = mark.fetchone()
+        renderer = recordArr[1]
+        print "Renderer=%d" % renderer
+        xmlStr = recordArr[2]
+        print "xmlStr = %s" % xmlStr
 
         jobDir = "%s/%d" % (self.wkdir,jobNo)
         if not os.path.exists(jobDir):
@@ -234,7 +237,10 @@ class renderQueue:
             #sys.stdout = jobLog
             #sys.stderr = jobLog
 
-
+            #if renderer==1:
+            #    tg = townguide.townguide(pr)
+            #else:
+            #    tg = townguide2.townguide(pr)
             tg = townguide.townguide(pr)
             self.setJobStatus(jobNo,self.COMPLETE)
             sys.stdout.flush()

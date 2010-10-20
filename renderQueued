@@ -36,7 +36,7 @@ d_start() {
                 -- \
                 --daemon \
                 --logdir $LOGDIR \
-	        --config /home/disk2/www/townguide/townguide.cfg \
+	        --config /var/www/townguide/townguide.cfg \
 	        --pid_file $PIDFILE \
 	        -r
 }

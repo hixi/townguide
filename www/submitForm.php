@@ -163,6 +163,17 @@ bottom left corner of your townguide map.  Adjust the map size in units of
 		<option value="A0">A0</option>  
 	    </SELECT></td>
 	  </tr>
+	  <tr>
+	    <td>Select Renderer</td>
+	    <td>
+	      <SELECT name="renderer">
+		<option selected value="1">Townguide-1</option>
+		<option value="2">Townguide-2</option>
+	    </SELECT></td>
+	    <td>
+	    </td>
+	  </tr>
+
   </tbody>
   </table>
   <table border="1" width="100%">

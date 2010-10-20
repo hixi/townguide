@@ -84,7 +84,7 @@ function retryJob($jobNo)
 
 function deleteJob($jobNo)
 {
-	$dir = "/home/disk2/www/townguide/www/output/".$jobNo;
+	$dir = "/var/www/townguide/www/output/".$jobNo;
 	echo "<p>deleteJob($jobNo) - directory $dir</p>";
 
    	$dbconn = pg_connect("host=localhost dbname=townguide user=www password=1234")
