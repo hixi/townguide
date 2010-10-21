@@ -1,0 +1,40 @@
+New version of townguide, broken into plugins, based on Waldemar's GSoC Project
+--This line, and those below, will be ignored--
+
+A    .
+A    plugins
+A    plugins/simpleLandscapeRenderer.py
+A    plugins/htmlRenderer.py
+A    plugins/simplePosterRenderer.py
+A    plugins/newPosterRenderer.py
+A    plugins/__init__.py
+A    plugins/bookRenderer.py
+A    plugins/posterRenderer.py
+A    tests_xml
+A    tests_xml/test-simplelandscape.xml
+A    tests_xml/test2.xml
+A    tests_xml/test3.xml
+A    tests_xml/test4.xml
+A    tests_xml/test5.xml
+A    tests_xml/test6.xml
+A    tests_xml/test-SF.xml
+A    tests_xml/test-SF2.xml
+A    tests_xml/test-SF-overlap.xml
+A    tests_xml/test-slandscape-japanese.xml
+A    tests_xml/test.xml
+AM   prefs.py
+A    __init__.py
+A    utils.py
+A    Cluster.py
+A    fonts
+AM   fonts/osaka.unicode.ttf
+A    fonts/NOTICE
+AM   fonts/DroidSans.ttf
+AM   fonts/DroidSerif-Regular.ttf
+AM   fonts/FreeSerif.ttf
+A    fonts/MODULE_LICENSE_APACHE2
+A    fonts/README.txt
+AM   fonts/unifont.ttf
+A    prefs.glade
+AM   townguide.py
+A    defaults.py

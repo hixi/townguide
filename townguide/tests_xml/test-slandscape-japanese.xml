@@ -1,0 +1,39 @@
+<xml>
+  <title>ケープ　タウン　ー　Hartlepool Street Map</title>
+  <origin>-33.9482,18.3702</origin>
+  <description>
+    京都御所は、1869年（明治2年）の東京行幸まで
+    歴代天皇の居所・執務所であった。現在（21世紀）の京都御所は
+    国有財産で、宮内庁が管轄する「皇室用財産」に分類されている。
+    隣接して京都大宮御所、仙洞御所があり、また北隣の今出川通を
+    挟んで同志社大学と同志社女子大学（両校とも今出川キャンパス）
+    が位置する。
+  </description>
+  <dpi>300</dpi>
+  <mapsize>14,14</mapsize>
+  <format>simplelandscape</format>
+  <pagesize>A4</pagesize>
+  <mapvfrac>75</mapvfrac>
+  <columnWidth>4.0</columnWidth>
+  <streetIndex>False</streetIndex>
+  <outdir>./rendered_maps/</outdir>
+  <download>false</download>
+  <xapi>false</xapi>
+  <datadir>./downloads/</datadir>
+  <mapfile>./styles/osm.xml</mapfile>
+  <detailsize>5</detailsize>
+  <tilesize>1000</tilesize>
+  <markersize>5</markersize>
+  <oscale>10</oscale>
+  <debug>False</debug>
+  <dbname>mapnik</dbname>
+  <uname>mapnik</uname>
+  <features>
+    Tourism:tourism='attraction',
+    Entertainment:amenity='cinema'|'arts_centre',
+    Leisure:leisure='golf'|'sports_centre'|'stadium'|'pitch'|'track',
+    Eating Out:amenity='restaurant',
+    Pubs:amenity='pub',
+    Hotels:tourism='hotel'|'motel'|'guest_house'
+  </features>
+</xml>

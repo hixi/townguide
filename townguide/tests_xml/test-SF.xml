@@ -1,0 +1,33 @@
+<xml>
+  <title>San Francisco Bay Area</title>
+  <origin>37.7595,-122.4362</origin>
+  <description>San Francisco's Bay Area</description>
+  <dpi>300</dpi>
+  <mapsize>2,3</mapsize>
+  <format>poster</format>
+  <pagesize>A4</pagesize>
+  <mapvfrac>75</mapvfrac>
+  <columnWidth>4.0</columnWidth>
+  <streetIndex>True</streetIndex>
+  <clusters>True</clusters>
+  <outdir>./rendered_maps/</outdir>
+  <download>false</download>
+  <xapi>false</xapi>
+  <datadir>./downloads/</datadir>
+  <mapfile>./styles/osm.xml</mapfile>
+  <detailsize>5</detailsize>
+  <tilesize>1000</tilesize>
+  <markersize>5</markersize>
+  <oscale>10</oscale>
+  <debug>False</debug>
+  <dbname>mapnik</dbname>
+  <uname>mapnik</uname>
+  <features>
+    Tourism:tourism='attraction',
+    Entertainment:amenity='cinema'|'arts_centre',
+    Leisure:leisure='golf'|'sports_centre'|'stadium'|'pitch'|'track',
+    Eating Out:amenity='restaurant',
+    Pubs:amenity='pub',
+    Hotels:tourism='hotel'|'motel'|'guest_house'
+  </features>
+</xml>

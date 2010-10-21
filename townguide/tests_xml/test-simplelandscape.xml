@@ -1,0 +1,35 @@
+<xml>
+  <title>ケープ　タウン　ー　Hartlepool Street Map</title>
+  <origin>-33.9482,18.3702</origin>
+  <description> 
+    It was founded in the 7th century AD, around the Northumbrian monastery of Hartlepool Abbey. The village grew during the Middle Ages and developed a harbour which served as the official port of the County palatine of Durham. A railway link to the South Durham
+ coal fields in 1835 resulted in further expansion, with the establishing of the new town of West Hartlepool. 日本語　Map of Hartlepool on July 2010  Español   Francés
+  </description>
+  <dpi>300</dpi>
+  <mapsize>1,1</mapsize>
+  <format>simpleposter</format>
+  <pagesize>A4</pagesize>
+  <mapvfrac>75</mapvfrac>
+  <columnWidth>4.0</columnWidth>
+  <streetIndex>True</streetIndex>
+  <outdir>./rendered_maps/</outdir>
+  <download>false</download>
+  <xapi>false</xapi>
+  <datadir>./downloads/</datadir>
+  <mapfile>./styles/osm.xml</mapfile>
+  <detailsize>5</detailsize>
+  <tilesize>1000</tilesize>
+  <markersize>5</markersize>
+  <oscale>10</oscale>
+  <debug>False</debug>
+  <dbname>mapnik</dbname>
+  <uname>mapnik</uname>
+  <features>
+    Tourism:tourism='attraction',
+    Entertainment:amenity='cinema'|'arts_centre',
+    Leisure:leisure='golf'|'sports_centre'|'stadium'|'pitch'|'track',
+    Eating Out:amenity='restaurant',
+    Pubs:amenity='pub',
+    Hotels:tourism='hotel'|'motel'|'guest_house'
+  </features>
+</xml>

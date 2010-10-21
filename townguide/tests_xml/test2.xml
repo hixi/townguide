@@ -1,0 +1,31 @@
+<xml>
+  <title>Hartlepool Street Map</title>
+  <origin>54.6466,-1.2619</origin>
+  <dpi>300</dpi>
+  <mapsize>3,3</mapsize>
+  <format>simplelandscape</format>
+  <pagesize>A4</pagesize>
+  <mapvfrac>75</mapvfrac>
+  <columnWidth>4.0</columnWidth>
+  <streetIndex>True</streetIndex>
+  <outdir>./rendered_maps/</outdir>
+  <download>false</download>
+  <clusters>false</clusters>
+  <datadir>/home/disk2/www/openpapermaps/app/townguide/fonts</datadir>
+  <mapfile>/home/disk2/www/openpapermaps/app/osm-mapnik2.xml</mapfile>
+  <detailsize>5</detailsize>
+  <tilesize>1000</tilesize>
+  <markersize>5</markersize>
+  <oscale>10</oscale>
+  <debug>False</debug>
+  <dbname>gis</dbname>
+  <uname>gisuser</uname>
+  <features>
+    Tourism:tourism='attraction',
+    Entertainment:amenity='cinema'|'arts_centre',
+    Leisure:leisure='golf'|'sports_centre'|'stadium'|'pitch'|'track',
+    Eating Out:amenity='restaurant',
+    Pubs:amenity='pub',
+    Hotels:tourism='hotel'|'motel'|'guest_house'
+  </features>
+</xml>
