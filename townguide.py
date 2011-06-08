@@ -102,7 +102,7 @@ from prefs import prefs
 import cairo
 import sys
 import psycopg2 as psycopg
-import mapnik
+import mapnik2 as mapnik
 import Image, ImageDraw, ImageFont
 import os
 import string
